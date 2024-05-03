@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.entity.UsersEntity;
 
 /**
- * 用户
+ * User
  */
 public interface UsersDao extends BaseMapper<UsersEntity> {
 	
