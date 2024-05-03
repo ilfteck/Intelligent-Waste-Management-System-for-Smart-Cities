@@ -12,111 +12,111 @@ import java.util.Date;
 import com.utils.DateUtil;
 
 /**
-* 垃圾出库申请
-* 后端返回视图实体辅助类
-* （通常后端关联的表或者自定义的字段需要返回使用）
+* Garbage removal request
+* The back end returns the view entity helper class
+* (Usually back-end associated tables or custom fields need to be returned for use)
 */
 @TableName("recycle_reserve")
 public class RecycleReserveView extends RecycleReserveEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	//当前表
+	//Current table
 	/**
-	* 申请状态的值
+	* The value of the application status
 	*/
-	@ColumnInfo(comment="申请状态的字典表值",type="varchar(200)")
+	@ColumnInfo(comment="The dictionary table value of the request status",type="varchar(200)")
 	private String recycleYuyueYesnoValue;
 
-	//级联表 垃圾回收
+	//Cascading table garbage collection
 		/**
-		* 垃圾回收名称
+		* Garbage collection name
 		*/
 
-		@ColumnInfo(comment="垃圾回收名称",type="varchar(200)")
+		@ColumnInfo(comment="Garbage collection name",type="varchar(200)")
 		private String recycleName;
 		/**
-		* 垃圾回收编号
+		* Garbage collection number
 		*/
 
-		@ColumnInfo(comment="垃圾回收编号",type="varchar(200)")
+		@ColumnInfo(comment="Garbage collection number",type="varchar(200)")
 		private String recycleUuidNumber;
 		/**
-		* 垃圾回收照片
+		* Garbage collection photos
 		*/
 
-		@ColumnInfo(comment="垃圾回收照片",type="varchar(200)")
+		@ColumnInfo(comment="Garbage collection photos",type="varchar(200)")
 		private String recyclePhoto;
 		/**
-		* 垃圾回收地点
+		* Refuse collection site
 		*/
 
-		@ColumnInfo(comment="垃圾回收地点",type="varchar(200)")
+		@ColumnInfo(comment="Refuse collection site",type="varchar(200)")
 		private String recycleAddress;
 		/**
-		* 垃圾回收类型
+		* Refuse collection site
 		*/
-		@ColumnInfo(comment="垃圾回收类型",type="int(11)")
+		@ColumnInfo(comment="Garbage collection type",type="int(11)")
 		private Integer recycleTypes;
 			/**
-			* 垃圾回收类型的值
+			* The value of the garbage collection type
 			*/
-			@ColumnInfo(comment="垃圾回收类型的字典表值",type="varchar(200)")
+			@ColumnInfo(comment="Dictionary table value of the garbage collection type",type="varchar(200)")
 			private String recycleValue;
 		/**
-		* 垃圾回收库存
+		* Garbage collection inventory
 		*/
 
-		@ColumnInfo(comment="垃圾回收库存",type="int(11)")
+		@ColumnInfo(comment="Garbage collection inventory",type="int(11)")
 		private Integer recycleKucunNumber;
 		/**
-		* 入库时间
+		* Warehousing time
 		*/
 		@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 		@DateTimeFormat
-		@ColumnInfo(comment="入库时间",type="timestamp")
+		@ColumnInfo(comment="Warehousing time",type="timestamp")
 		private Date recycleTime;
 		/**
-		* 垃圾回收介绍
+		* Introduction to garbage collection
 		*/
 
-		@ColumnInfo(comment="垃圾回收介绍",type="longtext")
+		@ColumnInfo(comment="Introduction to garbage collection",type="longtext")
 		private String recycleContent;
 		/**
-		* 逻辑删除
+		* Logical deletion
 		*/
 
-		@ColumnInfo(comment="逻辑删除",type="int(11)")
+		@ColumnInfo(comment="Logical deletion",type="int(11)")
 		private Integer recycleDelete;
-	//级联表 用户
+	//User
 		/**
-		* 用户姓名
+		* User name
 		*/
 
-		@ColumnInfo(comment="用户姓名",type="varchar(200)")
+		@ColumnInfo(comment="User name",type="varchar(200)")
 		private String memberName;
 		/**
-		* 用户手机号
+		* user phone
 		*/
 
-		@ColumnInfo(comment="用户手机号",type="varchar(200)")
+		@ColumnInfo(comment=" user phone",type="varchar(200)")
 		private String memberPhone;
 		/**
-		* 用户身份证号
+		* User id
 		*/
 
-		@ColumnInfo(comment="用户身份证号",type="varchar(200)")
+		@ColumnInfo(comment=" User id",type="varchar(200)")
 		private String memberIdNumber;
 		/**
-		* 用户头像
+		* memberPhoto
 		*/
 
-		@ColumnInfo(comment="用户头像",type="varchar(200)")
+		@ColumnInfo(comment="memberPhoto",type="varchar(200)")
 		private String memberPhoto;
 		/**
-		* 用户邮箱
+		* memberEmail
 		*/
 
-		@ColumnInfo(comment="用户邮箱",type="varchar(200)")
+		@ColumnInfo(comment="memberEmail",type="varchar(200)")
 		private String memberEmail;
 
 
@@ -136,215 +136,144 @@ public class RecycleReserveView extends RecycleReserveEntity implements Serializ
 
 
 
-	//当前表的
-	/**
-	* 获取： 申请状态的值
-	*/
+
 	public String getrecycleYuyueYesnoValue() {
 		return recycleYuyueYesnoValue;
 	}
-	/**
-	* 设置： 申请状态的值
-	*/
+	
 	public void setrecycleYuyueYesnoValue(String recycleYuyueYesnoValue) {
 		this.recycleYuyueYesnoValue = recycleYuyueYesnoValue;
 	}
 
 
-	//级联表的get和set 垃圾回收
-
-		/**
-		* 获取： 垃圾回收名称
-		*/
 		public String getrecycleName() {
 			return recycleName;
 		}
-		/**
-		* 设置： 垃圾回收名称
-		*/
+		
 		public void setrecycleName(String recycleName) {
 			this.recycleName = recycleName;
 		}
 
-		/**
-		* 获取： 垃圾回收编号
-		*/
+		
 		public String getrecycleUuidNumber() {
 			return recycleUuidNumber;
 		}
-		/**
-		* 设置： 垃圾回收编号
-		*/
+		
 		public void setrecycleUuidNumber(String recycleUuidNumber) {
 			this.recycleUuidNumber = recycleUuidNumber;
 		}
 
-		/**
-		* 获取： 垃圾回收照片
-		*/
+		
 		public String getrecyclePhoto() {
 			return recyclePhoto;
 		}
-		/**
-		* 设置： 垃圾回收照片
-		*/
+		
 		public void setrecyclePhoto(String recyclePhoto) {
 			this.recyclePhoto = recyclePhoto;
 		}
 
-		/**
-		* 获取： 垃圾回收地点
-		*/
+		
 		public String getrecycleAddress() {
 			return recycleAddress;
 		}
-		/**
-		* 设置： 垃圾回收地点
-		*/
+		
 		public void setrecycleAddress(String recycleAddress) {
 			this.recycleAddress = recycleAddress;
 		}
-		/**
-		* 获取： 垃圾回收类型
-		*/
+		
 		public Integer getrecycleTypes() {
 			return recycleTypes;
 		}
-		/**
-		* 设置： 垃圾回收类型
-		*/
+		
 		public void setrecycleTypes(Integer recycleTypes) {
 			this.recycleTypes = recycleTypes;
 		}
 
 
-			/**
-			* 获取： 垃圾回收类型的值
-			*/
 			public String getrecycleValue() {
 				return recycleValue;
 			}
-			/**
-			* 设置： 垃圾回收类型的值
-			*/
+		
 			public void setrecycleValue(String recycleValue) {
 				this.recycleValue = recycleValue;
 			}
 
-		/**
-		* 获取： 垃圾回收库存
-		*/
+		
 		public Integer getrecycleKucunNumber() {
 			return recycleKucunNumber;
 		}
-		/**
-		* 设置： 垃圾回收库存
-		*/
+		
 		public void setrecycleKucunNumber(Integer recycleKucunNumber) {
 			this.recycleKucunNumber = recycleKucunNumber;
 		}
 
-		/**
-		* 获取： 入库时间
-		*/
+		
 		public Date getrecycleTime() {
 			return recycleTime;
 		}
-		/**
-		* 设置： 入库时间
-		*/
+		
 		public void setrecycleTime(Date recycleTime) {
 			this.recycleTime = recycleTime;
 		}
 
-		/**
-		* 获取： 垃圾回收介绍
-		*/
+		
 		public String getrecycleContent() {
 			return recycleContent;
 		}
-		/**
-		* 设置： 垃圾回收介绍
-		*/
+		
 		public void setrecycleContent(String recycleContent) {
 			this.recycleContent = recycleContent;
 		}
 
-		/**
-		* 获取： 逻辑删除
-		*/
+		
 		public Integer getrecycleDelete() {
 			return recycleDelete;
 		}
-		/**
-		* 设置： 逻辑删除
-		*/
+		
 		public void setrecycleDelete(Integer recycleDelete) {
 			this.recycleDelete = recycleDelete;
 		}
-	//级联表的get和set 用户
-
-		/**
-		* 获取： 用户姓名
-		*/
+	
 		public String getmemberName() {
 			return memberName;
 		}
-		/**
-		* 设置： 用户姓名
-		*/
+		
 		public void setmemberName(String memberName) {
 			this.memberName = memberName;
 		}
 
-		/**
-		* 获取： 用户手机号
-		*/
+		
 		public String getmemberPhone() {
 			return memberPhone;
 		}
-		/**
-		* 设置： 用户手机号
-		*/
+		
 		public void setmemberPhone(String memberPhone) {
 			this.memberPhone = memberPhone;
 		}
 
-		/**
-		* 获取： 用户身份证号
-		*/
+		
 		public String getmemberIdNumber() {
 			return memberIdNumber;
 		}
-		/**
-		* 设置： 用户身份证号
-		*/
+		
 		public void setmemberIdNumber(String memberIdNumber) {
 			this.memberIdNumber = memberIdNumber;
 		}
 
-		/**
-		* 获取： 用户头像
-		*/
+		
 		public String getmemberPhoto() {
 			return memberPhoto;
 		}
-		/**
-		* 设置： 用户头像
-		*/
+		
 		public void setmemberPhoto(String memberPhoto) {
 			this.memberPhoto = memberPhoto;
 		}
 
-		/**
-		* 获取： 用户邮箱
-		*/
+		
 		public String getmemberEmail() {
 			return memberEmail;
 		}
-		/**
-		* 设置： 用户邮箱
-		*/
+		
 		public void setmemberEmail(String memberEmail) {
 			this.memberEmail = memberEmail;
 		}
