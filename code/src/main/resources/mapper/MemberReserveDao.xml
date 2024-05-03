@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.MemberReserveDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.recycle_reserve_uuid_number as recyclereserveUuidNumber
+        ,a.recycle_id as recycleId
+        ,a.member_id as memberId
+        ,a.recycle_reserve_text as recyclereserveText
+        ,a.recycle_transport_time as recycletransportTime
+        ,a.recycle_reserve_yesno_types as recyclereserveYesnoTypes
+        ,a.recycle_reserve_yesno_text as recyclereserveYesnoText
+        ,a.recycle_reserve_shenhe_time as recyclereserveShenheTime
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.RecycleReserveView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+        ,recycle.recycle_name as recycleName
+        ,recycle.recycle_uuid_number as recycleUuidNumber
+        ,recycle.recycle_photo as recyclePhoto
+        ,recycle.recycle_address as recycleAddress
+        ,recycle.recycle_types as recycleTypes
+        ,recycle.recycle_kucun_number as recycleKucunNumber
+        ,recycle.recycle_time as recycleTime
+        ,recycle.recycle_content as recycleContent
+        ,recycle.recycle_delete as recycleDelete
+        ,member.member_name as memberName
+        ,member.member_phone as memberPhone
+        ,member.member_id_number as memberIdNumber
+        ,member.member_photo as memberPhoto
+        ,member.member_email as memberEmail
+
+        FROM recycle_reserve  a
+        left JOIN recycle recycle ON a.recycle_id = recycle.id
+        left JOIN member member ON a.member_id = member.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.recyclereserveUuidNumber != '' and params.recyclereserveUuidNumber != null and params.recyclereserveUuidNumber != 'null' ">
+                and a.recycle_reserve_uuid_number like CONCAT('%',#{params.recyclereserveUuidNumber},'%')
+            </if>
+            <if test="params.recycleId != null and params.recycleId != ''">
+                and (
+                    a.recycle_id = #{params.recycleId}
+                )
+            </if>
+            <if test="params.memberId != null and params.memberId != ''">
+                and (
+                    a.member_id = #{params.memberId}
+                )
+            </if>
+            <if test=" params.recyclereserveText != '' and params.recyclereserveText != null and params.recyclereserveText != 'null' ">
+                and a.recycle_reserve_text like CONCAT('%',#{params.recyclereserveText},'%')
+            </if>
+            <if test=" params.recycletransportTimeStart != '' and params.recycletransportTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_transport_time) >= UNIX_TIMESTAMP(#{params.recycletransportTimeStart}) ]]>
+            </if>
+            <if test=" params.recycletransportTimeEnd != '' and params.recycletransportTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_transport_time) <= UNIX_TIMESTAMP(#{params.recycletransportTimeEnd}) ]]>
+            </if>
+            <if test="params.recyclereserveYesnoTypes != null and params.recyclereserveYesnoTypes != ''">
+                and a.recycle_reserve_yesno_types = #{params.recyclereserveYesnoTypes}
+            </if>
+            <if test=" params.recyclereserveYesnoText != '' and params.recyclereserveYesnoText != null and params.recyclereserveYesnoText != 'null' ">
+                and a.recycle_reserve_yesno_text like CONCAT('%',#{params.recyclereserveYesnoText},'%')
+            </if>
+            <if test=" params.recyclereserveShenheTimeStart != '' and params.recyclereserveShenheTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_reserve_shenhe_time) >= UNIX_TIMESTAMP(#{params.recyclereserveShenheTimeStart}) ]]>
+            </if>
+            <if test=" params.recyclereserveShenheTimeEnd != '' and params.recyclereserveShenheTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_reserve_shenhe_time) <= UNIX_TIMESTAMP(#{params.recyclereserveShenheTimeEnd}) ]]>
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+
+                <!-- 判断垃圾回收的id不为空 -->
+            <if test=" params.recycleIdNotNull != '' and params.recycleIdNotNull != null and params.recycleIdNotNull != 'null' ">
+                and a.recycle_id IS NOT NULL
+            </if>
+            <if test=" params.recycleName != '' and params.recycleName != null and params.recycleName != 'null' ">
+                and recycle.recycle_name like CONCAT('%',#{params.recycleName},'%')
+            </if>
+            <if test=" params.recycleUuidNumber != '' and params.recycleUuidNumber != null and params.recycleUuidNumber != 'null' ">
+                and recycle.recycle_uuid_number like CONCAT('%',#{params.recycleUuidNumber},'%')
+            </if>
+            <if test=" params.recycleAddress != '' and params.recycleAddress != null and params.recycleAddress != 'null' ">
+                and recycle.recycle_address like CONCAT('%',#{params.recycleAddress},'%')
+            </if>
+            <if test="params.recycleTypes != null  and params.recycleTypes != ''">
+                and recycle.recycle_types = #{params.recycleTypes}
+            </if>
+
+            <if test="params.recycleKucunNumberStart != null  and params.recycleKucunNumberStart != '' ">
+                <![CDATA[  and recycle.recycle_kucun_number >= #{params.recycleKucunNumberStart}   ]]>
+            </if>
+            <if test="params.recycleKucunNumberEnd != null  and params.recycleKucunNumberEnd != '' ">
+                <![CDATA[  and recycle.recycle_kucun_number <= #{params.recycleKucunNumberEnd}   ]]>
+            </if>
+            <if test="params.recycleKucunNumber != null  and params.recycleKucunNumber != '' ">
+                and recycle.recycle_kucun_number = #{params.recycleKucunNumber}
+            </if>
+            <if test=" params.recycleTimeStart != '' and params.recycleTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recycle.recycle_time) >= UNIX_TIMESTAMP(#{params.recycleTimeStart}) ]]>
+            </if>
+            <if test=" params.recycleTimeEnd != '' and params.recycleTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recycle.recycle_time) <= UNIX_TIMESTAMP(#{params.recycleTimeEnd}) ]]>
+            </if>
+            <if test=" params.recycleContent != '' and params.recycleContent != null and params.recycleContent != 'null' ">
+                and recycle.recycle_content like CONCAT('%',#{params.recycleContent},'%')
+            </if>
+            <if test="params.recycleDeleteStart != null  and params.recycleDeleteStart != '' ">
+                <![CDATA[  and recycle.recycle_delete >= #{params.recycleDeleteStart}   ]]>
+            </if>
+            <if test="params.recycleDeleteEnd != null  and params.recycleDeleteEnd != '' ">
+                <![CDATA[  and recycle.recycle_delete <= #{params.recycleDeleteEnd}   ]]>
+            </if>
+            <if test="params.recycleDelete != null  and params.recycleDelete != '' ">
+                and recycle.recycle_delete = #{params.recycleDelete}
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recycle.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recycle.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+                <!-- 判断用户的id不为空 -->
+            <if test=" params.memberIdNotNull != '' and params.memberIdNotNull != null and params.memberIdNotNull != 'null' ">
+                and a.member_id IS NOT NULL
+            </if>
+            <if test=" params.memberName != '' and params.memberName != null and params.memberName != 'null' ">
+                and member.member_name like CONCAT('%',#{params.memberName},'%')
+            </if>
+            <if test=" params.memberPhone != '' and params.memberPhone != null and params.memberPhone != 'null' ">
+                and member.member_phone like CONCAT('%',#{params.memberPhone},'%')
+            </if>
+            <if test=" params.memberIdNumber != '' and params.memberIdNumber != null and params.memberIdNumber != 'null' ">
+                and member.member_id_number like CONCAT('%',#{params.memberIdNumber},'%')
+            </if>
+            <if test=" params.memberEmail != '' and params.memberEmail != null and params.memberEmail != 'null' ">
+                and member.member_email like CONCAT('%',#{params.memberEmail},'%')
+            </if>
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>

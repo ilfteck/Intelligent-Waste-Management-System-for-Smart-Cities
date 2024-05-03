@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.TransportDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.recycle_reserve_id as recyclereserveId
+        ,a.transport_name as transportName
+        ,a.transport_uuid_number as transportUuidNumber
+        ,a.transport_photo as transportPhoto
+        ,a.transport_address as transportAddress
+        ,a.transport_types as transportTypes
+        ,a.transport_mudi_address as transportMudiAddress
+        ,a.transport_content as transportContent
+        ,a.transport_delete as transportDelete
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.TransportView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+        ,recyclereserve.recycle_reserve_uuid_number as recyclereserveUuidNumber
+        ,recyclereserve.member_id as recyclereservememberId
+        ,recyclereserve.recycle_reserve_text as recyclereserveText
+        ,recyclereserve.recycle_transport_time as recycletransportTime
+        ,recyclereserve.recycle_reserve_yesno_types as recyclereserveYesnoTypes
+        ,recyclereserve.recycle_reserve_yesno_text as recyclereserveYesnoText
+        ,recyclereserve.recycle_reserve_shenhe_time as recyclereserveShenheTime
+
+        FROM transport  a
+        left JOIN recycle_reserve recyclereserve ON a.recycle_reserve_id = recyclereserve.id
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test="params.recyclereserveId != null and params.recyclereserveId != ''">
+                and (
+                    a.recycle_reserve_id = #{params.recyclereserveId}
+                )
+            </if>
+            <if test=" params.transportName != '' and params.transportName != null and params.transportName != 'null' ">
+                and a.transport_name like CONCAT('%',#{params.transportName},'%')
+            </if>
+            <if test=" params.transportUuidNumber != '' and params.transportUuidNumber != null and params.transportUuidNumber != 'null' ">
+                and a.transport_uuid_number like CONCAT('%',#{params.transportUuidNumber},'%')
+            </if>
+            <if test=" params.transportAddress != '' and params.transportAddress != null and params.transportAddress != 'null' ">
+                and a.transport_address like CONCAT('%',#{params.transportAddress},'%')
+            </if>
+            <if test="params.transportTypes != null and params.transportTypes != ''">
+                and a.transport_types = #{params.transportTypes}
+            </if>
+            <if test=" params.transportMudiAddress != '' and params.transportMudiAddress != null and params.transportMudiAddress != 'null' ">
+                and a.transport_mudi_address like CONCAT('%',#{params.transportMudiAddress},'%')
+            </if>
+            <if test=" params.transportContent != '' and params.transportContent != null and params.transportContent != 'null' ">
+                and a.transport_content like CONCAT('%',#{params.transportContent},'%')
+            </if>
+            <if test="params.transportDeleteStart != null and params.transportDeleteStart != ''">
+                <![CDATA[  and a.transport_delete >= #{params.transportDeleteStart}   ]]>
+            </if>
+            <if test="params.transportDeleteEnd != null and params.transportDeleteEnd != ''">
+                <![CDATA[  and a.transport_delete <= #{params.transportDeleteEnd}   ]]>
+            </if>
+             <if test="params.transportDelete != null and params.transportDelete != ''">
+                and a.transport_delete = #{params.transportDelete}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+
+                <!-- 判断垃圾出库申请的id不为空 -->
+            <if test=" params.recyclereserveIdNotNull != '' and params.recyclereserveIdNotNull != null and params.recyclereserveIdNotNull != 'null' ">
+                and a.recycle_reserve_id IS NOT NULL
+            </if>
+            <if test=" params.recyclereserveUuidNumber != '' and params.recyclereserveUuidNumber != null and params.recyclereserveUuidNumber != 'null' ">
+                and recyclereserve.recycle_reserve_uuid_number like CONCAT('%',#{params.recyclereserveUuidNumber},'%')
+            </if>
+            <if test="params.recycleId != null  and params.recycleId != ''">
+                and recyclereserve.recycle_id = #{params.recycleId}
+            </if>
+            <if test="params.memberId != null  and params.memberId != ''">
+                and recyclereserve.member_id = #{params.memberId}
+            </if>
+            <if test=" params.recyclereserveText != '' and params.recyclereserveText != null and params.recyclereserveText != 'null' ">
+                and recyclereserve.recycle_reserve_text like CONCAT('%',#{params.recyclereserveText},'%')
+            </if>
+            <if test=" params.recycletransportTimeStart != '' and params.recycletransportTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.recycle_transport_time) >= UNIX_TIMESTAMP(#{params.recycletransportTimeStart}) ]]>
+            </if>
+            <if test=" params.recycletransportTimeEnd != '' and params.recycletransportTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.recycle_transport_time) <= UNIX_TIMESTAMP(#{params.recycletransportTimeEnd}) ]]>
+            </if>
+            <if test="params.recyclereserveYesnoTypes != null  and params.recyclereserveYesnoTypes != ''">
+                and recyclereserve.recycle_reserve_yesno_types = #{params.recyclereserveYesnoTypes}
+            </if>
+
+            <if test=" params.recyclereserveYesnoText != '' and params.recyclereserveYesnoText != null and params.recyclereserveYesnoText != 'null' ">
+                and recyclereserve.recycle_reserve_yesno_text like CONCAT('%',#{params.recyclereserveYesnoText},'%')
+            </if>
+            <if test=" params.recyclereserveShenheTimeStart != '' and params.recyclereserveShenheTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.recycle_reserve_shenhe_time) >= UNIX_TIMESTAMP(#{params.recyclereserveShenheTimeStart}) ]]>
+            </if>
+            <if test=" params.recyclereserveShenheTimeEnd != '' and params.recyclereserveShenheTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.recycle_reserve_shenhe_time) <= UNIX_TIMESTAMP(#{params.recyclereserveShenheTimeEnd}) ]]>
+            </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(recyclereserve.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>

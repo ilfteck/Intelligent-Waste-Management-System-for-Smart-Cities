@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dao.RecycleDao">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        a.id as id
+        ,a.recycle_name as recycleName
+        ,a.recycle_uuid_number as recycleUuidNumber
+        ,a.recycle_photo as recyclePhoto
+        ,a.recycle_address as recycleAddress
+        ,a.recycle_types as recycleTypes
+        ,a.recycle_kucun_number as recycleKucunNumber
+        ,a.recycle_time as recycleTime
+        ,a.recycle_content as recycleContent
+        ,a.recycle_delete as recycleDelete
+        ,a.insert_time as insertTime
+        ,a.create_time as createTime
+    </sql>
+    <select id="selectListView" parameterType="map" resultType="com.entity.view.RecycleView" >
+        SELECT
+        <include refid="Base_Column_List" />
+        <!-- 级联表的字段 -->
+
+        FROM recycle  a
+
+        <where>
+            <if test="params.ids != null">
+                and a.id in
+                <foreach item="item" index="index" collection="params.ids" open="(" separator="," close=")">
+                #{item}
+                </foreach>
+            </if>
+            <if test=" params.recycleName != '' and params.recycleName != null and params.recycleName != 'null' ">
+                and a.recycle_name like CONCAT('%',#{params.recycleName},'%')
+            </if>
+            <if test=" params.recycleUuidNumber != '' and params.recycleUuidNumber != null and params.recycleUuidNumber != 'null' ">
+                and a.recycle_uuid_number like CONCAT('%',#{params.recycleUuidNumber},'%')
+            </if>
+            <if test=" params.recycleAddress != '' and params.recycleAddress != null and params.recycleAddress != 'null' ">
+                and a.recycle_address like CONCAT('%',#{params.recycleAddress},'%')
+            </if>
+            <if test="params.recycleTypes != null and params.recycleTypes != ''">
+                and a.recycle_types = #{params.recycleTypes}
+            </if>
+            <if test="params.recycleKucunNumberStart != null and params.recycleKucunNumberStart != ''">
+                <![CDATA[  and a.recycle_kucun_number >= #{params.recycleKucunNumberStart}   ]]>
+            </if>
+            <if test="params.recycleKucunNumberEnd != null and params.recycleKucunNumberEnd != ''">
+                <![CDATA[  and a.recycle_kucun_number <= #{params.recycleKucunNumberEnd}   ]]>
+            </if>
+             <if test="params.recycleKucunNumber != null and params.recycleKucunNumber != ''">
+                and a.recycle_kucun_number = #{params.recycleKucunNumber}
+             </if>
+            <if test=" params.recycleTimeStart != '' and params.recycleTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_time) >= UNIX_TIMESTAMP(#{params.recycleTimeStart}) ]]>
+            </if>
+            <if test=" params.recycleTimeEnd != '' and params.recycleTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.recycle_time) <= UNIX_TIMESTAMP(#{params.recycleTimeEnd}) ]]>
+            </if>
+            <if test=" params.recycleContent != '' and params.recycleContent != null and params.recycleContent != 'null' ">
+                and a.recycle_content like CONCAT('%',#{params.recycleContent},'%')
+            </if>
+            <if test="params.recycleDeleteStart != null and params.recycleDeleteStart != ''">
+                <![CDATA[  and a.recycle_delete >= #{params.recycleDeleteStart}   ]]>
+            </if>
+            <if test="params.recycleDeleteEnd != null and params.recycleDeleteEnd != ''">
+                <![CDATA[  and a.recycle_delete <= #{params.recycleDeleteEnd}   ]]>
+            </if>
+             <if test="params.recycleDelete != null and params.recycleDelete != ''">
+                and a.recycle_delete = #{params.recycleDelete}
+             </if>
+            <if test=" params.insertTimeStart != '' and params.insertTimeStart != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) >= UNIX_TIMESTAMP(#{params.insertTimeStart}) ]]>
+            </if>
+            <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
+                <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
+            </if>
+
+        </where>
+        order by a.${params.sort} ${params.order}
+    </select>
+
+</mapper>
