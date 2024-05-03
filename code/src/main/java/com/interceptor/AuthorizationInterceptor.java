@@ -21,7 +21,7 @@ import com.service.TokenService;
 import com.utils.R;
 
 /**
- * 权限(Token)验证
+ * Permission (Token) authentication
  */
 @Component
 public class AuthorizationInterceptor implements HandlerInterceptor {
@@ -40,7 +40,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
         if("/dictionary/page".equals(request.getServletPath())  || "/file/upload".equals(request.getServletPath()) || "/member/register".equals(request.getServletPath()) ){//请求路径是字典表或者文件上传 直接放行
             return true;
         }
-        //支持跨域请求
+        //Support cross-domain requests
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -54,11 +54,11 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        //从header中获取token
+        //Get the token from the header
         String token = request.getHeader(LOGIN_TOKEN_KEY);
         
         /**
-         * 不需要验证权限的方法直接放过
+         * Methods that do not need to verify permissions are simply passed
          */
         if(annotation!=null) {
         	return true;
@@ -82,13 +82,13 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 		response.setContentType("application/json; charset=utf-8");
 		try {
 		    writer = response.getWriter();
-		    writer.print(JSONObject.toJSONString(R.error(401, "请先登录")));
+		    writer.print(JSONObject.toJSONString(R.error(401, "Please log in first")));
 		} finally {
 		    if(writer != null){
 		        writer.close();
 		    }
 		}
-//				throw new EIException("请先登录", 401);
+//				throw new EIException("Please log in first", 401);
 		return false;
     }
 }
