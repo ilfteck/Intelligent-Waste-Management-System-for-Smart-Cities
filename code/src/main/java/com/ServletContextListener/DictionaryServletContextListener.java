@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 字典初始化监视器  用的是服务器监听,每次项目启动,都会调用这个类
+ * The dictionary initialization monitor uses server listening and is called every time the project is started
  */
 @WebListener
 public class DictionaryServletContextListener implements ServletContextListener {
@@ -26,14 +26,14 @@ public class DictionaryServletContextListener implements ServletContextListener 
     private MyThreadMethod myThreadMethod;
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        logger.info("----------服务器停止----------");
+        logger.info("----------Server stop----------");
     }
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ApplicationContext appContext = WebApplicationContextUtils.getWebApplicationContext(sce.getServletContext());
 
-        logger.info("----------字典表初始化开始----------");
+        logger.info("----------Dictionarymap initialization begins----------");
         DictionaryService dictionaryService = (DictionaryService)appContext.getBean("dictionaryService");
         List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new EntityWrapper<DictionaryEntity>());
         Map<String, Map<Integer,String>> map = new HashMap<>();
@@ -46,16 +46,16 @@ public class DictionaryServletContextListener implements ServletContextListener 
             map.put(d.getDicCode(),m);
         }
         sce.getServletContext().setAttribute("dictionaryMap", map);
-        logger.info("----------字典表初始化完成----------");
+        logger.info("----------The dictionarymap initialization is complete----------");
 
 
 
-        logger.info("----------线程执行开始----------");
+        logger.info("----------Thread execution start----------");
         if (myThreadMethod == null) {
             myThreadMethod = new MyThreadMethod();
             myThreadMethod.start(); // servlet 上下文初始化时启动线程myThreadMethod
         }
-        logger.info("----------线程执行结束----------");
+        logger.info("----------End of thread execution----------");
     }
 
 }
