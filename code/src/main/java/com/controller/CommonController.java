@@ -38,7 +38,7 @@ import com.utils.FileUtil;
 import com.utils.R;
 
 /**
- * 通用接口
+ * Universal interface
  */
 @RestController
 public class CommonController {
@@ -48,24 +48,24 @@ public class CommonController {
 
 
     /**
-     * Java代码实现MySQL数据库导出
+     * Java code to achieve MySQL database export
      *
-     * @param mysqlUrl     MySQL安装路径
-     * @param hostIP       MySQL数据库所在服务器地址IP
-     * @param userName     进入数据库所需要的用户名
-     * @param hostPort     数据库端口
-     * @param password     进入数据库所需要的密码
-     * @param savePath     数据库文件保存路径
-     * @param fileName     数据库导出文件文件名
-     * @param databaseName 要导出的数据库名
-     * @return 返回true表示导出成功，否则返回false。
+     * @param mysqlUrl     
+     * @param hostIP      
+     * @param userName    
+     * @param hostPort     
+     * @param password     
+     * @param savePath     
+     * @param fileName    
+     * @param databaseName 
+     * @return 
      */
     @IgnoreAuth
     @RequestMapping("/beifen")
     public R beifen(String mysqlUrl, String hostIP, String userName, String hostPort, String password, String savePath, String fileName, String databaseName) {
         File saveFile = new File(savePath);
-        if (!saveFile.exists()) {// 如果目录不存在 
-            saveFile.mkdirs();// 创建文件夹 
+        if (!saveFile.exists()) {// If the directory does not exist
+            saveFile.mkdirs();// Create folder
         }
         if (!savePath.endsWith(File.separator)) {
             savePath = savePath + File.separator;
@@ -87,7 +87,7 @@ public class CommonController {
             printWriter.flush();
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error("备份数据出错");
+            return R.error("Backup data error");
         } finally {
             try {
                 if (bufferedReader != null) {
@@ -104,16 +104,16 @@ public class CommonController {
     }
 
     /**
-     * Java实现MySQL数据库导入
+     * Java code to achieve MySQL database export
      *
-     * @param mysqlUrl     MySQL安装路径
-     * @param hostIP       MySQL数据库所在服务器地址IP
-     * @param userName     进入数据库所需要的用户名
-     * @param hostPort     数据库端口
-     * @param password     进入数据库所需要的密码
-     * @param savePath     数据库文件保存路径
-     * @param fileName     数据库导出文件文件名
-     * @param databaseName 要导出的数据库名
+     * @param mysqlUrl     
+     * @param hostIP       
+     * @param userName     
+     * @param hostPort    
+     * @param password     
+     * @param savePath     
+     * @param fileName     
+     * @param databaseName 
      */
     @IgnoreAuth
     @RequestMapping("/huanyuan")
@@ -121,7 +121,7 @@ public class CommonController {
         try {
             Runtime rt = Runtime.getRuntime();
             Process child1 = rt.exec(mysqlUrl+"mysql.exe  -h" + hostIP + " -u" + userName + " -P" + hostPort + " -p" + password + " " + databaseName);
-            OutputStream out = child1.getOutputStream();//控制台的输入信息作为输出流
+            OutputStream out = child1.getOutputStream();//The input information from the console is the output stream
             String inStr;
             StringBuffer sb = new StringBuffer("");
             String outStr;
@@ -132,53 +132,53 @@ public class CommonController {
             outStr = sb.toString();
             OutputStreamWriter writer = new OutputStreamWriter(out, "utf8");
             writer.write(outStr);
-// 注：这里如果用缓冲方式写入文件的话，会导致中文乱码，用flush()方法则可以避免
+// Note: If the file is written in buffer mode, it will cause Chinese garbled characters, and the flush() method can be avoided
             writer.flush();
             out.close();
             br.close();
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
-            return R.error("数据导入出错");
+            return R.error("Data import error");
         }
         return R.ok();
     }
 
 
     /**
-     * 饼状图求和
+     *Sum of pie charts
      * @return
      */
     @RequestMapping("/pieSum")
     public R pieSum(@RequestParam Map<String,Object> params) {
-        logger.debug("饼状图求和:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Sum of pie charts:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.pieSum(params);
         return R.ok().put("data", result);
     }
 
     /**
-     * 饼状图统计
+     * Pie chart statistics
      * @return
      */
     @RequestMapping("/pieCount")
     public R pieCount(@RequestParam Map<String,Object> params) {
-        logger.debug("饼状图统计:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Pie chart statistics:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.pieCount(params);
         return R.ok().put("data", result);
     }
 
     /**
-     * 柱状图求和单列
+     * Bar graphs sum in single columns
      * @return
      */
     @RequestMapping("/barSumOne")
     public R barSumOne(@RequestParam Map<String,Object> params) {
-        logger.debug("柱状图求和单列:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Bar graphs sum in single columns:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.barSumOne(params);
 
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//Report X-axis
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//topic
         List<String> yAxis0 = new ArrayList<>();
         yAxis.add(yAxis0);
         legend.add("");
@@ -195,17 +195,17 @@ public class CommonController {
         return R.ok().put("data", resultMap);
     }
     /**
-     * 柱状图统计单列
+     * Bar chart statistics single column
      * @return
      */
     @RequestMapping("/barCountOne")
     public R barCountOne(@RequestParam Map<String,Object> params) {
-        logger.debug("柱状图统计单列:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Bar chart statistics single column:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.barCountOne(params);
 
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//x
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//topic
 
         List<String> yAxis0 = new ArrayList<>();
         yAxis.add(yAxis0);
@@ -224,16 +224,16 @@ public class CommonController {
     }
 
     /**
-     * 柱状图统计双列
+     * Bar chart statistics double columns
      * @return
      */
     @RequestMapping("/barSumTwo")
     public R barSumTwo(@RequestParam Map<String,Object> params) {
-        logger.debug("柱状图统计双列:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Bar chart statistics double columns:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.barSumTwo(params);
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//x
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//topic
 
         Map<String, HashMap<String, String>> dataMap = new LinkedHashMap<>();
         for(Map<String, Object> map :result){
@@ -241,7 +241,7 @@ public class CommonController {
             String name2Value = String.valueOf(map.get("name2"));
             String value = String.valueOf(map.get("value"));
             if(!legend.contains(name2Value)){
-                legend.add(name2Value);//添加完成后 就是最全的第二列的类型
+                legend.add(name2Value);//When added, it is the most complete type of the second column
             }
             if(dataMap.containsKey(name1Value)){
                 dataMap.get(name1Value).put(name2Value,value);
@@ -279,16 +279,16 @@ public class CommonController {
         return R.ok().put("data", resultMap);
     }
     /**
-     * 柱状图统计双列
+     * Bar chart statistics double columns
      * @return
      */
     @RequestMapping("/barCountTwo")
     public R barCountTwo(@RequestParam Map<String,Object> params) {
-        logger.debug("柱状图统计双列:,,Controller:{},,params:{}",this.getClass().getName(),params);
+        logger.debug("Bar chart statistics double columns:,,Controller:{},,params:{}",this.getClass().getName(),params);
         List<Map<String, Object>> result = commonService.barCountTwo(params);
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//x
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//topic
 
         Map<String, HashMap<String, String>> dataMap = new LinkedHashMap<>();
         for(Map<String, Object> map :result){
@@ -296,7 +296,7 @@ public class CommonController {
             String name2Value = String.valueOf(map.get("name2"));
             String value = String.valueOf(map.get("value"));
             if(!legend.contains(name2Value)){
-                legend.add(name2Value);//添加完成后 就是最全的第二列的类型
+                legend.add(name2Value);//When added, it is the most complete type of the second column
             }
             if(dataMap.containsKey(name1Value)){
                 dataMap.get(name1Value).put(name2Value,value);
@@ -335,14 +335,14 @@ public class CommonController {
     }
 
     /**
-     tableName 查询表
-     condition1 条件1
-     condition1Value 条件1值
-     average 计算平均评分
+     tableName 
+     condition1 
+     condition1Value 
+     average 
 
-     取值
-     有值 Number(res.data.value.toFixed(1))
-     无值 if(res.data){}
+   
+      Number(res.data.value.toFixed(1))
+      if(res.data){}
      * */
     @IgnoreAuth
     @RequestMapping("/queryScore")
@@ -353,9 +353,9 @@ public class CommonController {
     }
 
     /**
-     * 查询字典表的分组统计总条数
-     *  tableName  		表名
-     *	groupColumn  	分组字段
+     * 
+     *  tableName  		
+     *	groupColumn  	
      * @return
      */
     @RequestMapping("/newSelectGroupCount")
@@ -366,10 +366,9 @@ public class CommonController {
     }
 
     /**
-     * 查询字典表的分组求和
-     * tableName  		表名
-     * groupColumn  		分组字段
-     * sumCloum			统计字段
+     * tableName  		
+     * groupColumn  	
+     * sumCloum			
      * @return
      */
     @RequestMapping("/newSelectGroupSum")
@@ -380,21 +379,20 @@ public class CommonController {
     }
 
     /**
-     * 柱状图求和 老的
+     * 
      */
     @RequestMapping("/barSum")
     public R barSum(@RequestParam Map<String,Object> params) {
         logger.debug("barSum方法:,,Controller:{},,params:{}",this.getClass().getName(), com.alibaba.fastjson.JSONObject.toJSONString(params));
-        Boolean isJoinTableFlag =  false;//是否有级联表相关
-        String one =  "";//第一优先
-        String two =  "";//第二优先
+        Boolean isJoinTableFlag =  false;
+        String one =  "";
+        String two =  "";
 
-        //处理thisTable和joinTable 处理内容是把json字符串转为Map并把带有,的切割为数组
-        //当前表
+        
         Map<String,Object> thisTable = JSON.parseObject(String.valueOf(params.get("thisTable")),Map.class);
         params.put("thisTable",thisTable);
 
-        //级联表
+        
         String joinTableString = String.valueOf(params.get("joinTable"));
         if(StringUtil.isNotEmpty(joinTableString)) {
             Map<String, Object> joinTable = JSON.parseObject(joinTableString, Map.class);
@@ -406,7 +404,7 @@ public class CommonController {
             thisTable.put("date",String.valueOf(thisTable.get("date")).split(","));
             one = "thisDate0";
         }
-        if(isJoinTableFlag){//级联表日期
+        if(isJoinTableFlag){
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("date")))){
                 joinTable.put("date",String.valueOf(joinTable.get("date")).split(","));
@@ -419,7 +417,7 @@ public class CommonController {
                 }
             }
         }
-        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("string")))){//当前表字符串
+        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("string")))){//string
             thisTable.put("string",String.valueOf(thisTable.get("string")).split(","));
             if(StringUtil.isEmpty(one)){
                 one ="thisString0";
@@ -429,7 +427,7 @@ public class CommonController {
                 }
             }
         }
-        if(isJoinTableFlag){//级联表字符串
+        if(isJoinTableFlag){//The string of the cascading table
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("string")))){
                 joinTable.put("string",String.valueOf(joinTable.get("string")).split(","));
@@ -442,7 +440,7 @@ public class CommonController {
                 }
             }
         }
-        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("types")))){//当前表类型
+        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("types")))){//Current table type
             thisTable.put("types",String.valueOf(thisTable.get("types")).split(","));
             if(StringUtil.isEmpty(one)){
                 one ="thisTypes0";
@@ -452,7 +450,7 @@ public class CommonController {
                 }
             }
         }
-        if(isJoinTableFlag){//级联表类型
+        if(isJoinTableFlag){//Current table type
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("types")))){
                 joinTable.put("types",String.valueOf(joinTable.get("types")).split(","));
@@ -469,11 +467,11 @@ public class CommonController {
 
         List<Map<String, Object>> result = commonService.barSum(params);
 
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//x
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//topic
 
-        if(StringUtil.isEmpty(two)){//不包含第二列
+        if(StringUtil.isEmpty(two)){//The second column is not included
             List<String> yAxis0 = new ArrayList<>();
             yAxis.add(yAxis0);
             legend.add("");
@@ -483,7 +481,7 @@ public class CommonController {
                 xAxis.add(oneValue);
                 yAxis0.add(value);
             }
-        }else{//包含第二列
+        }else{//Include second column
             Map<String, HashMap<String, String>> dataMap = new LinkedHashMap<>();
             if(StringUtil.isNotEmpty(two)){
                 for(Map<String, Object> map :result){
@@ -491,7 +489,7 @@ public class CommonController {
                     String twoValue = String.valueOf(map.get(two));
                     String value = String.valueOf(map.get("value"));
                     if(!legend.contains(twoValue)){
-                        legend.add(twoValue);//添加完成后 就是最全的第二列的类型
+                        legend.add(twoValue);//When added, it is the most complete type of the second column
                     }
                     if(dataMap.containsKey(oneValue)){
                         dataMap.get(oneValue).put(twoValue,value);
@@ -531,22 +529,18 @@ public class CommonController {
         return R.ok().put("data", resultMap);
     }
 
-    /**
-     * 柱状图统计 老的
-     */
+   
     @RequestMapping("/barCount")
     public R barCount(@RequestParam Map<String,Object> params) {
         logger.debug("barCount方法:,,Controller:{},,params:{}",this.getClass().getName(), com.alibaba.fastjson.JSONObject.toJSONString(params));
-        Boolean isJoinTableFlag =  false;//是否有级联表相关
-        String one =  "";//第一优先
-        String two =  "";//第二优先
+        Boolean isJoinTableFlag =  false;
+        String one =  "";
+        String two =  "";
 
-        //处理thisTable和joinTable 处理内容是把json字符串转为Map并把带有,的切割为数组
-        //当前表
+       
         Map<String,Object> thisTable = JSON.parseObject(String.valueOf(params.get("thisTable")),Map.class);
         params.put("thisTable",thisTable);
 
-        //级联表
         String joinTableString = String.valueOf(params.get("joinTable"));
         if(StringUtil.isNotEmpty(joinTableString)) {
             Map<String, Object> joinTable = JSON.parseObject(joinTableString, Map.class);
@@ -554,11 +548,11 @@ public class CommonController {
             isJoinTableFlag = true;
         }
 
-        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("date")))){//当前表日期
+        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("date")))){
             thisTable.put("date",String.valueOf(thisTable.get("date")).split(","));
             one = "thisDate0";
         }
-        if(isJoinTableFlag){//级联表日期
+        if(isJoinTableFlag){
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("date")))){
                 joinTable.put("date",String.valueOf(joinTable.get("date")).split(","));
@@ -571,7 +565,7 @@ public class CommonController {
                 }
             }
         }
-        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("string")))){//当前表字符串
+        if(StringUtil.isNotEmpty(String.valueOf(thisTable.get("string")))){
             thisTable.put("string",String.valueOf(thisTable.get("string")).split(","));
             if(StringUtil.isEmpty(one)){
                 one ="thisString0";
@@ -581,7 +575,7 @@ public class CommonController {
                 }
             }
         }
-        if(isJoinTableFlag){//级联表字符串
+        if(isJoinTableFlag){
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("string")))){
                 joinTable.put("string",String.valueOf(joinTable.get("string")).split(","));
@@ -604,7 +598,7 @@ public class CommonController {
                 }
             }
         }
-        if(isJoinTableFlag){//级联表类型
+        if(isJoinTableFlag){
             Map<String, Object> joinTable = (Map<String, Object>) params.get("joinTable");
             if(StringUtil.isNotEmpty(String.valueOf(joinTable.get("types")))){
                 joinTable.put("types",String.valueOf(joinTable.get("types")).split(","));
@@ -621,11 +615,11 @@ public class CommonController {
 
         List<Map<String, Object>> result = commonService.barCount(params);
 
-        List<String> xAxis = new ArrayList<>();//报表x轴
-        List<List<String>> yAxis = new ArrayList<>();//y轴
-        List<String> legend = new ArrayList<>();//标题
+        List<String> xAxis = new ArrayList<>();//x
+        List<List<String>> yAxis = new ArrayList<>();//y
+        List<String> legend = new ArrayList<>();//
 
-        if(StringUtil.isEmpty(two)){//不包含第二列
+        if(StringUtil.isEmpty(two)){
             List<String> yAxis0 = new ArrayList<>();
             yAxis.add(yAxis0);
             legend.add("");
@@ -635,7 +629,7 @@ public class CommonController {
                 xAxis.add(oneValue);
                 yAxis0.add(value);
             }
-        }else{//包含第二列
+        }else{
             Map<String, HashMap<String, String>> dataMap = new LinkedHashMap<>();
             if(StringUtil.isNotEmpty(two)){
                 for(Map<String, Object> map :result){
@@ -643,7 +637,7 @@ public class CommonController {
                     String twoValue = String.valueOf(map.get(two));
                     String value = String.valueOf(map.get("value"));
                     if(!legend.contains(twoValue)){
-                        legend.add(twoValue);//添加完成后 就是最全的第二列的类型
+                        legend.add(twoValue);
                     }
                     if(dataMap.containsKey(oneValue)){
                         dataMap.get(oneValue).put(twoValue,value);
