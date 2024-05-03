@@ -6,13 +6,13 @@ import com.entity.RecycleReserveEntity;
 import java.util.Map;
 
 /**
- * 垃圾出库申请 服务类
+ * RecycleReserveService
  */
 public interface RecycleReserveService extends IService<RecycleReserveEntity> {
 
     /**
-    * @param params 查询参数
-    * @return 带分页的查询出来的数据
+    * @param params 
+    * @return 
     */
      PageUtils queryPage(Map<String, Object> params);
 
