@@ -1,19 +1,18 @@
 package com.thread;
 
 /**
- * 线程执行方法（做一些项目启动后 一直要执行的操作，比如根据时间自动更改订单状态，比如订单签收30天自动收货功能，比如根据时间来更改状态）
- */
+* Thread execution method (do some operations that have been performed since the project started, such as automatically changing the order status according to the time, such as the order signing 30 days automatic receiving function, such as changing the status according to the time) */
 public class MyThreadMethod extends Thread  {
     public void run() {
-        while (!this.isInterrupted()) {// 线程未中断执行循环
+        while (!this.isInterrupted()) {// The thread does not interrupt the execution loop
             try {
-                Thread.sleep(5000); //每隔2000ms执行一次
+                Thread.sleep(5000); //This command is executed every 2000ms
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
-//			 ------------------ 开始执行 ---------------------------
-//            System.out.println("线程执行中:" + System.currentTimeMillis());
+//			 ------------------ Start execution ---------------------------
+//            System.out.println("Thread execution:" + System.currentTimeMillis());
         }
     }
 }
