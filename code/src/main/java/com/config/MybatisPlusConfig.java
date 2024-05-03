@@ -8,13 +8,13 @@ import com.baomidou.mybatisplus.mapper.MetaObjectHandler;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
 
 /**
- * mybatis-plus配置
+ * mybatis-plus configuration
  */
 @Configuration
 public class MybatisPlusConfig {
 
     /**
-     * 分页插件
+     * Paging plug-in
      */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
