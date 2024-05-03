@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.entity.view.DictionaryView;
 
 /**
- * 字典 Dao 接口
+ * Dictionary Dao interface
  *
  * @author 
  */
