@@ -14,7 +14,7 @@ import com.service.RecycleReserveService;
 import com.entity.view.RecycleReserveView;
 
 /**
- * 垃圾出库申请 服务实现类
+ *RecycleReserveService
  */
 @Service("RecycleReserveService")
 @Transactional
