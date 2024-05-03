@@ -14,7 +14,7 @@ import com.service.AnnouncementService;
 import com.entity.view.AnnouncementView;
 
 /**
- * 公告 服务实现类
+ * Announcement service implementation class
  */
 @Service("AnnouncementService")
 @Transactional
