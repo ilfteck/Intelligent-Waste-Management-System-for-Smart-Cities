@@ -7,14 +7,14 @@ import java.net.URL;
 
 
 /**
- * HttpClient工具类
+ * HttpClient tool classes
  */
 public class HttpClientUtils {
 
     /**
      * @param uri
      * @return String
-     * @description get请求方式
+     * @description get request mode
      * @author: long.he01
      */
     public static String doGet(String uri) {
