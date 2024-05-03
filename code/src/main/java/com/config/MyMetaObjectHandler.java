@@ -7,7 +7,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import com.baomidou.mybatisplus.mapper.MetaObjectHandler;
 
 /**
- * 自定义填充处理器
+ * Custom fill processor
  */
 public class MyMetaObjectHandler extends MetaObjectHandler {
 
@@ -23,6 +23,6 @@ public class MyMetaObjectHandler extends MetaObjectHandler {
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        // 关闭更新填充、这里不执行
+        // Turn off update fill, not performed here
     }
 }
