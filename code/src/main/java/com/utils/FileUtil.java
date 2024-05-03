@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
-* @author yangliyuan
-* @version 创建时间：2020年2月7日 下午8:01:14
-* 类说明 : 
+* @author Evan
+* @version 创建时间：2024年2月7日 下午8:01:14 
 */
 
 public class FileUtil {
@@ -23,7 +22,7 @@ public class FileUtil {
 		while ((rc = content.read(buff, 0, 100)) > 0) {
 			swapStream.write(buff, 0, rc);
 		}
-		// 获得二进制数组
+		// Get binary array
 		return swapStream.toByteArray();
 	}
 }
