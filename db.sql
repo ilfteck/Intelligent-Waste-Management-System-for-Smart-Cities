@@ -34,7 +34,7 @@ CREATE TABLE `transport` (
   `insert_time` timestamp NULL DEFAULT NULL COMMENT 'insert time',
   `create_time` timestamp NULL DEFAULT NULL COMMENT 'create time  show1 show2 photoShow',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='运输';
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COMMENT='transport';
 
 /*Data for the table `transport` */
 
