@@ -27,8 +27,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 垃圾出库申请
- * 后端接口
+ * Garbage disposal application
+ * Back-end interface
  * @author
  * @email
 */
@@ -46,87 +46,83 @@ public class RecycleReserveController {
     private TokenService tokenService;
 
     @Autowired
-    private TransportService transportService;//运输
+    private TransportService transportService;
     @Autowired
-    private DictionaryService dictionaryService;//字典
+    private DictionaryService dictionaryService;
     @Autowired
-    private AnnouncementService announcementService;//公告
+    private AnnouncementService announcementService;
     @Autowired
-    private RecycleService recycleService;//垃圾回收
+    private RecycleService recycleService;
     @Autowired
-    private MemberService memberService;//用户
+    private MemberService memberService;
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;
 
 
     /**
-    * 后端列表
+    * back-end list
     */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request){
-        logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
+        logger.debug("page way:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永不会进入");
+            return R.error(511,"never enter");
         else if("用户".equals(role))
             params.put("memberId",request.getSession().getAttribute("userId"));
         CommonUtil.checkMap(params);
         PageUtils page = recycleReserveService.queryPage(params);
 
-        //字典表数据转换
+        //Dictionary table data conversion
         List<RecycleReserveView> list =(List<RecycleReserveView>)page.getList();
         for(RecycleReserveView c:list){
-            //修改对应字典表字段
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * back-end detail
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
-        logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
+        logger.debug("info way:,,Controller:{},,id:{}",this.getClass().getName(),id);
         RecycleReserveEntity recycleYuyue = recycleReserveService.selectById(id);
         if(recycleYuyue !=null){
-            //entity转view
+            //entity to view
             RecycleReserveView view = new RecycleReserveView();
-            BeanUtils.copyProperties( recycleYuyue , view );//把实体数据重构到view中
-            //级联表 用户
-            //级联表
+            BeanUtils.copyProperties( recycleYuyue , view );//Refactor the entity data into the view
             MemberEntity member = memberService.selectById(recycleYuyue.getmemberId());
             if(member != null){
-            BeanUtils.copyProperties( member , view ,new String[]{ "id", "createTime", "insertTime", "updateTime", "memberId"});//把级联的数据添加到view中,并排除id和创建时间字段,当前表的级联注册表
+            BeanUtils.copyProperties( member , view ,new String[]{ "id", "createTime", "insertTime", "updateTime", "memberId"});//Adds the cascaded data to the view and excludes the id and creation time fields for the current table in the cascaded registry
             view.setmemberId(member.getId());
             }
-            //级联表 垃圾回收
-            //级联表
             RecycleEntity recycle = recycleService.selectById(recycleYuyue.getrecycleId());
             if(recycle != null){
-            BeanUtils.copyProperties( recycle , view ,new String[]{ "id", "createTime", "insertTime", "updateTime", "memberId"});//把级联的数据添加到view中,并排除id和创建时间字段,当前表的级联注册表
+            BeanUtils.copyProperties( recycle , view ,new String[]{ "id", "createTime", "insertTime", "updateTime", "memberId"});//Adds the cascaded data to the view and excludes the id and creation time fields for the current table in the cascaded registry
             view.setrecycleId(recycle.getId());
             }
-            //修改对应字典表字段
+            //Example Modify the corresponding dictionary table fields
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
-            return R.error(511,"查不到数据");
+            return R.error(511,"No data available");
         }
 
     }
 
     /**
-    * 后端保存
+    * back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody RecycleReserveEntity recycleYuyue, HttpServletRequest request){
-        logger.debug("save方法:,,Controller:{},,recycleYuyue:{}",this.getClass().getName(),recycleYuyue.toString());
+        logger.debug("save way:,,Controller:{},,recycleYuyue:{}",this.getClass().getName(),recycleYuyue.toString());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
-        else if("用户".equals(role))
+            return R.error(511,"never enter");
+        else if("User".equals(role))
             recycleYuyue.setmemberId(Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId"))));
 
         Wrapper<RecycleReserveEntity> queryWrapper = new EntityWrapper<RecycleReserveEntity>()
@@ -135,7 +131,7 @@ public class RecycleReserveController {
             .in("recycle_reserve_yesno_types", new Integer[]{1,2})
             ;
 
-        logger.info("sql语句:"+queryWrapper.getSqlSegment());
+        logger.info("sql language:"+queryWrapper.getSqlSegment());
         RecycleReserveEntity recycleReserveEntity = recycleReserveService.selectOne(queryWrapper);
         if(recycleReserveEntity ==null){
             recycleYuyue.setrecycleYuyueYesnoTypes(1);
@@ -143,61 +139,61 @@ public class RecycleReserveController {
             return R.ok();
         }else {
             if(recycleReserveEntity.getrecycleYuyueYesnoTypes()==1)
-                return R.error(511,"有相同的待审核的数据");
+                return R.error(511,"Have the same data pending review");
             else if(recycleReserveEntity.getrecycleYuyueYesnoTypes()==2)
-                return R.error(511,"有相同的审核通过的数据");
+                return R.error(511,"Have the same approved data");
             else
-                return R.error(511,"表中有相同数据");
+                return R.error(511,"The table has the same data");
         }
     }
 
     /**
-    * 后端修改
+    * Back-end modification
     */
     @RequestMapping("/update")
     public R update(@RequestBody RecycleReserveEntity recycleYuyue, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.debug("update方法:,,Controller:{},,recycleYuyue:{}",this.getClass().getName(),recycleYuyue.toString());
-        RecycleReserveEntity oldRecycleReserveEntity = recycleReserveService.selectById(recycleYuyue.getId());//查询原先数据
+        logger.debug("update way:,,Controller:{},,recycleYuyue:{}",this.getClass().getName(),recycleYuyue.toString());
+        RecycleReserveEntity oldRecycleReserveEntity = recycleReserveService.selectById(recycleYuyue.getId());//Query original data
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
-//        else if("用户".equals(role))
+//            return R.error(511,"never enter");
+//        else if("User".equals(role))
 //            recycleYuyue.setmemberId(Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId"))));
 
-            recycleReserveService.updateById(recycleYuyue);//根据id更新
+            recycleReserveService.updateById(recycleYuyue);
             return R.ok();
     }
 
 
     /**
-    * 审核
+    *examine
     */
     @RequestMapping("/shenhe")
     public R shenhe(@RequestBody RecycleReserveEntity recycleReserveEntity, HttpServletRequest request){
         logger.debug("shenhe方法:,,Controller:{},,recycleYuyueEntity:{}",this.getClass().getName(),
             recycleReserveEntity.toString());
 
-        RecycleReserveEntity oldrecycleYuyue = recycleReserveService.selectById(recycleReserveEntity.getId());//查询原先数据
+        RecycleReserveEntity oldrecycleYuyue = recycleReserveService.selectById(recycleReserveEntity.getId());
 
-//        if(recycleYuyueEntity.getrecycleYuyueYesnoTypes() == 2){//通过
+//        if(recycleYuyueEntity.getrecycleYuyueYesnoTypes() == 2){
 //            recycleYuyueEntity.setrecycleYuyueTypes();
-//        }else if(recycleYuyueEntity.getrecycleYuyueYesnoTypes() == 3){//拒绝
+//        }else if(recycleYuyueEntity.getrecycleYuyueYesnoTypes() == 3){
 //            recycleYuyueEntity.setrecycleYuyueTypes();
 //        }
-        recycleReserveEntity.setrecycleYuyueShenheTime(new Date());//审核时间
-        recycleReserveService.updateById(recycleReserveEntity);//审核
+        recycleReserveEntity.setrecycleYuyueShenheTime(new Date());
+        recycleReserveService.updateById(recycleReserveEntity);//examine
 
         return R.ok();
     }
 
     /**
-    * 删除
+    * delete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
         logger.debug("delete:,,Controller:{},,ids:{}",this.getClass().getName(),ids.toString());
-        List<RecycleReserveEntity> oldrecycleYuyueList = recycleReserveService.selectBatchIds(Arrays.asList(ids));//要删除的数据
+        List<RecycleReserveEntity> oldrecycleYuyueList = recycleReserveService.selectBatchIds(Arrays.asList(ids));//delete data
         recycleReserveService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();
@@ -205,7 +201,7 @@ public class RecycleReserveController {
 
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
@@ -213,61 +209,61 @@ public class RecycleReserveController {
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<RecycleReserveEntity> recycleYuyueList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<RecycleReserveEntity> recycleYuyueList = new ArrayList<>();//Batch upload
+            Map<String, List<String>> seachFields= new HashMap<>();//Batch upload
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
-                return R.error(511,"该文件没有后缀");
+                return R.error(511,"The file has no suffix");
             }else{
                 String suffix = fileName.substring(lastIndexOf);
                 if(!".xls".equals(suffix)){
-                    return R.error(511,"只支持后缀为xls的excel文件");
+                    return R.error(511,"Only excel files whose suffix is xls are supported");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);
                     File file = new File(resource.getFile());
                     if(!file.exists()){
-                        return R.error(511,"找不到上传文件，请联系管理员");
+                        return R.error(511,"Unable to find upload file, please contact administrator");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());/
+                        dataList.remove(0);// Delete the first line because the first line is the prompt
                         for(List<String> data:dataList){
                             //循环
                             RecycleReserveEntity recycleReserveEntity = new RecycleReserveEntity();
-//                            recycleYuyueEntity.setrecycleYuyueUuidNumber(data.get(0));                    //报名编号 要改的
-//                            recycleYuyueEntity.setrecycleId(Integer.valueOf(data.get(0)));   //垃圾回收 要改的
-//                            recycleYuyueEntity.setmemberId(Integer.valueOf(data.get(0)));   //用户 要改的
-//                            recycleYuyueEntity.setrecycleYuyueText(data.get(0));                    //报名理由 要改的
-//                            recycleYuyueEntity.setrecycletransportTime(sdf.parse(data.get(0)));          //出库时间 要改的
-//                            recycleYuyueEntity.setrecycleYuyueYesnoTypes(Integer.valueOf(data.get(0)));   //申请状态 要改的
-//                            recycleYuyueEntity.setrecycleYuyueYesnoText(data.get(0));                    //审核回复 要改的
-//                            recycleYuyueEntity.setrecycleYuyueShenheTime(sdf.parse(data.get(0)));          //审核时间 要改的
-//                            recycleYuyueEntity.setInsertTime(date);//时间
-//                            recycleYuyueEntity.setCreateTime(date);//时间
+//                            recycleYuyueEntity.setrecycleYuyueUuidNumber(data.get(0));                   
+//                            recycleYuyueEntity.setrecycleId(Integer.valueOf(data.get(0)));   
+//                            recycleYuyueEntity.setmemberId(Integer.valueOf(data.get(0)));   
+//                            recycleYuyueEntity.setrecycleYuyueText(data.get(0));                    
+//                            recycleYuyueEntity.setrecycletransportTime(sdf.parse(data.get(0)));          
+//                            recycleYuyueEntity.setrecycleYuyueYesnoTypes(Integer.valueOf(data.get(0)));   
+//                            recycleYuyueEntity.setrecycleYuyueYesnoText(data.get(0));                    
+//                            recycleYuyueEntity.setrecycleYuyueShenheTime(sdf.parse(data.get(0)));          
+//                            recycleYuyueEntity.setInsertTime(date);
+//                            recycleYuyueEntity.setCreateTime(date);
                             recycleYuyueList.add(recycleReserveEntity);
 
 
-                            //把要查询是否重复的字段放入map中
-                                //报名编号
+                            //Put the field you want to query for duplicates into the map
+                                //number
                                 if(seachFields.containsKey("recycleYuyueUuidNumber")){
                                     List<String> recycleYuyueUuidNumber = seachFields.get("recycleYuyueUuidNumber");
-                                    recycleYuyueUuidNumber.add(data.get(0));//要改的
+                                    recycleYuyueUuidNumber.add(data.get(0));
                                 }else{
                                     List<String> recycleYuyueUuidNumber = new ArrayList<>();
-                                    recycleYuyueUuidNumber.add(data.get(0));//要改的
+                                    recycleYuyueUuidNumber.add(data.get(0));
                                     seachFields.put("recycleYuyueUuidNumber",recycleYuyueUuidNumber);
                                 }
                         }
 
-                        //查询是否重复
-                         //报名编号
+                        //Put the field you want to query for duplicates into the map
+                         //number
                         List<RecycleReserveEntity> recycleYuyueEntities_recycleYuyueUuidNumber = recycleReserveService.selectList(new EntityWrapper<RecycleReserveEntity>().in("recycle_reserve_uuid_number", seachFields.get("recycleYuyueUuidNumber")));
                         if(recycleYuyueEntities_recycleYuyueUuidNumber.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(RecycleReserveEntity s:recycleYuyueEntities_recycleYuyueUuidNumber){
                                 repeatFields.add(s.getrecycleYuyueUuidNumber());
                             }
-                            return R.error(511,"数据库的该表中的 [报名编号] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The [Registration Number] field in the table of the database already exists:"+repeatFields.toString());
                         }
                         recycleReserveService.insertBatch(recycleYuyueList);
                         return R.ok();
@@ -276,7 +272,7 @@ public class RecycleReserveController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannoat be inserted in batches, contact the administrator");
         }
     }
 
