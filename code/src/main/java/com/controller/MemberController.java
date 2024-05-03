@@ -28,8 +28,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 用户
- * 后端接口
+ * User
+ * Back-end interface
  * @author
  * @email
 */
@@ -47,54 +47,54 @@ public class MemberController {
     private TokenService tokenService;
 
     @Autowired
-    private TransportService transportService;//运输
+    private TransportService transportService;
     @Autowired
-    private DictionaryService dictionaryService;//字典
+    private DictionaryService dictionaryService;
     @Autowired
-    private AnnouncementService announcementService;//公告
+    private AnnouncementService announcementService;
     @Autowired
-    private RecycleService recycleService;//垃圾回收
+    private RecycleService recycleService;
     @Autowired
-    private RecycleReserveService recycleReserveService;//垃圾出库申请
+    private RecycleReserveService recycleReserveService;
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;
 
 
     /**
-    * 后端列表
+    * back-end list
     */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request){
         logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永不会进入");
-        else if("用户".equals(role))
+            return R.error(511,"Will never enter");
+        else if("User".equals(role))
             params.put("memberId",request.getSession().getAttribute("userId"));
         CommonUtil.checkMap(params);
         PageUtils page = memberService.queryPage(params);
 
-        //字典表数据转换
+        //Dictionary table data conversion
         List<MemberView> list =(List<MemberView>)page.getList();
         for(MemberView c:list){
-            //修改对应字典表字段
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * back-end detail
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
         logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
         MemberEntity member = memberService.selectById(id);
         if(member !=null){
-            //entity转view
+            //entity to view
             MemberView view = new MemberView();
-            BeanUtils.copyProperties( member , view );//把实体数据重构到view中
-            //修改对应字典表字段
+            BeanUtils.copyProperties( member , view );//Dictionary table data conversion
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
@@ -104,15 +104,15 @@ public class MemberController {
     }
 
     /**
-    * 后端保存
+    *back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody MemberEntity member, HttpServletRequest request){
-        logger.debug("save方法:,,Controller:{},,member:{}",this.getClass().getName(),member.toString());
+        logger.debug("save way:,,Controller:{},,member:{}",this.getClass().getName(),member.toString());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
+            return R.error(511,"Never enter");
 
         Wrapper<MemberEntity> queryWrapper = new EntityWrapper<MemberEntity>()
             .eq("username", member.getUsername())
@@ -130,33 +130,32 @@ public class MemberController {
             memberService.insert(member);
             return R.ok();
         }else {
-            return R.error(511,"账户或者用户手机号或者用户身份证号已经被使用");
+            return R.error(511,"The account or user's mobile phone number or user ID number has been used");
         }
     }
 
     /**
-    * 后端修改
+    * back-end change
     */
     @RequestMapping("/update")
     public R update(@RequestBody MemberEntity member, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         logger.debug("update方法:,,Controller:{},,member:{}",this.getClass().getName(),member.toString());
-        MemberEntity oldMemberEntity = memberService.selectById(member.getId());//查询原先数据
-
+        MemberEntity oldMemberEntity = memberService.selectById(member.getId());//The account or user's mobile phone number or user ID number has been used
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
+//            return R.error(511,"no enter");
         if("".equals(member.getmemberPhoto()) || "null".equals(member.getmemberPhoto())){
                 member.setmemberPhoto(null);
         }
 
-            memberService.updateById(member);//根据id更新
+            memberService.updateById(member);
             return R.ok();
     }
 
 
 
     /**
-    * 删除
+    * delete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
@@ -169,104 +168,104 @@ public class MemberController {
 
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
-        logger.debug("batchInsert方法:,,Controller:{},,fileName:{}",this.getClass().getName(),fileName);
+        logger.debug("batchInsert way:,,Controller:{},,fileName:{}",this.getClass().getName(),fileName);
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<MemberEntity> memberList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<MemberEntity> memberList = new ArrayList<>();//Batch upload
+            Map<String, List<String>> seachFields= new HashMap<>();//Batch upload
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
-                return R.error(511,"该文件没有后缀");
+                return R.error(511,"The file has no suffix");
             }else{
                 String suffix = fileName.substring(lastIndexOf);
                 if(!".xls".equals(suffix)){
-                    return R.error(511,"只支持后缀为xls的excel文件");
+                    return R.error(511,"Only excel files whose suffix is xls are supported");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//Only excel files whose suffix is xls are supported
                     File file = new File(resource.getFile());
                     if(!file.exists()){
                         return R.error(511,"找不到上传文件，请联系管理员");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//Only excel files whose suffix is xls are supported
+                        dataList.remove(0);//Only excel files whose suffix is xls are supported
                         for(List<String> data:dataList){
-                            //循环
+                            //loop
                             MemberEntity memberEntity = new MemberEntity();
-//                            memberEntity.setUsername(data.get(0));                    //账户 要改的
-//                            //memberEntity.setPassword("123456");//密码
-//                            memberEntity.setmemberName(data.get(0));                    //用户姓名 要改的
-//                            memberEntity.setmemberPhone(data.get(0));                    //用户手机号 要改的
-//                            memberEntity.setmemberIdNumber(data.get(0));                    //用户身份证号 要改的
+//                            memberEntity.setUsername(data.get(0));                    
+//                            //memberEntity.setPassword("123456");
+//                            memberEntity.setmemberName(data.get(0));                    
+//                            memberEntity.setmemberPhone(data.get(0));                   
+//                            memberEntity.setmemberIdNumber(data.get(0));                    
 //                            memberEntity.setmemberPhoto("");//详情和图片
-//                            memberEntity.setSexTypes(Integer.valueOf(data.get(0)));   //性别 要改的
-//                            memberEntity.setmemberEmail(data.get(0));                    //用户邮箱 要改的
-//                            memberEntity.setCreateTime(date);//时间
+//                            memberEntity.setSexTypes(Integer.valueOf(data.get(0)));   
+//                            memberEntity.setmemberEmail(data.get(0));                   
+//                            memberEntity.setCreateTime(date);
                             memberList.add(memberEntity);
 
 
-                            //把要查询是否重复的字段放入map中
-                                //账户
+                            //Put the field you want to query for duplicates into the map
+                                //account
                                 if(seachFields.containsKey("username")){
                                     List<String> username = seachFields.get("username");
-                                    username.add(data.get(0));//要改的
+                                    username.add(data.get(0));
                                 }else{
                                     List<String> username = new ArrayList<>();
-                                    username.add(data.get(0));//要改的
+                                    username.add(data.get(0));
                                     seachFields.put("username",username);
                                 }
-                                //用户手机号
+                                //User phone
                                 if(seachFields.containsKey("memberPhone")){
                                     List<String> memberPhone = seachFields.get("memberPhone");
-                                    memberPhone.add(data.get(0));//要改的
+                                    memberPhone.add(data.get(0));
                                 }else{
                                     List<String> memberPhone = new ArrayList<>();
-                                    memberPhone.add(data.get(0));//要改的
+                                    memberPhone.add(data.get(0));
                                     seachFields.put("memberPhone",memberPhone);
                                 }
-                                //用户身份证号
+                                //User id
                                 if(seachFields.containsKey("memberIdNumber")){
                                     List<String> memberIdNumber = seachFields.get("memberIdNumber");
-                                    memberIdNumber.add(data.get(0));//要改的
+                                    memberIdNumber.add(data.get(0));
                                 }else{
                                     List<String> memberIdNumber = new ArrayList<>();
-                                    memberIdNumber.add(data.get(0));//要改的
+                                    memberIdNumber.add(data.get(0));
                                     seachFields.put("memberIdNumber",memberIdNumber);
                                 }
                         }
 
-                        //查询是否重复
-                         //账户
+                        // Query whether the query is repeated
+                         //account
                         List<MemberEntity> memberEntities_username = memberService.selectList(new EntityWrapper<MemberEntity>().in("username", seachFields.get("username")));
                         if(memberEntities_username.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(MemberEntity s:memberEntities_username){
                                 repeatFields.add(s.getUsername());
                             }
-                            return R.error(511,"数据库的该表中的 [账户] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The [Account] field in the table of the database already exists:"+repeatFields.toString());
                         }
-                         //用户手机号
+                         //User phone
                         List<MemberEntity> memberEntities_memberPhone = memberService.selectList(new EntityWrapper<MemberEntity>().in("member_phone", seachFields.get("memberPhone")));
                         if(memberEntities_memberPhone.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(MemberEntity s:memberEntities_memberPhone){
                                 repeatFields.add(s.getmemberPhone());
                             }
-                            return R.error(511,"数据库的该表中的 [用户手机号] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The [phone] field in the table of the database already exists:"+repeatFields.toString());
                         }
-                         //用户身份证号
+                         //User id
                         List<MemberEntity> memberEntities_memberIdNumber = memberService.selectList(new EntityWrapper<MemberEntity>().in("member_id_number", seachFields.get("memberIdNumber")));
                         if(memberEntities_memberIdNumber.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(MemberEntity s:memberEntities_memberIdNumber){
                                 repeatFields.add(s.getmemberIdNumber());
                             }
-                            return R.error(511,"数据库的该表中的 [用户身份证号] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The User [ID Number] field in the table of the database already exists:"+repeatFields.toString());
                         }
                         memberService.insertBatch(memberList);
                         return R.ok();
@@ -275,23 +274,23 @@ public class MemberController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannot be inserted in batches, contact the administrator");
         }
     }
 
     /**
-    * 登录
+    * login
     */
     @IgnoreAuth
     @RequestMapping(value = "/login")
     public R login(String username, String password, String captcha, HttpServletRequest request) {
         MemberEntity member = memberService.selectOne(new EntityWrapper<MemberEntity>().eq("username", username));
         if(member==null || !member.getPassword().equals(password))
-            return R.error("账号或密码不正确");
+            return R.error("The account or password is incorrect");
         String token = tokenService.generateToken(member.getId(),username, "member", "用户");
         R r = R.ok();
         r.put("token", token);
-        r.put("role","用户");
+        r.put("role","User");
         r.put("username",member.getmemberName());
         r.put("tableName","member");
         r.put("userId",member.getId());
@@ -299,7 +298,7 @@ public class MemberController {
     }
 
     /**
-    * 注册
+    * Sign in
     */
     @IgnoreAuth
     @PostMapping(value = "/register")
@@ -314,7 +313,7 @@ public class MemberController {
             ;
         MemberEntity memberEntity = memberService.selectOne(queryWrapper);
         if(memberEntity != null)
-            return R.error("账户或者用户手机号或者用户身份证号已经被使用");
+            return R.error("The account or user's mobile phone number or user ID number has been used");
         member.setCreateTime(new Date());
         memberService.insert(member);
 
@@ -322,7 +321,7 @@ public class MemberController {
     }
 
     /**
-     * 重置密码
+     * Reset password
      */
     @GetMapping(value = "/resetPassword")
     public R resetPassword(Integer  id, HttpServletRequest request) {
@@ -333,19 +332,19 @@ public class MemberController {
     }
 
 	/**
-	 * 修改密码
+	 * change password
 	 */
 	@GetMapping(value = "/updatePassword")
 	public R updatePassword(String  oldPassword, String  newPassword, HttpServletRequest request) {
         MemberEntity member = memberService.selectById((Integer)request.getSession().getAttribute("userId"));
 		if(newPassword == null){
-			return R.error("新密码不能为空") ;
+			return R.error("The new password cannot be empty") ;
 		}
 		if(!oldPassword.equals(member.getPassword())){
-			return R.error("原密码输入错误");
+			return R.error("The old password was entered incorrectly");
 		}
 		if(newPassword.equals(member.getPassword())){
-			return R.error("新密码不能和原密码一致") ;
+			return R.error("The new password cannot be the same as the old password") ;
 		}
         member.setPassword(newPassword);
 		memberService.updateById(member);
@@ -355,7 +354,7 @@ public class MemberController {
 
 
     /**
-     * 忘记密码
+     * forget password
      */
     @IgnoreAuth
     @RequestMapping(value = "/resetPass")
@@ -366,39 +365,38 @@ public class MemberController {
             memberService.updateById(member);
             return R.ok();
         }else{
-           return R.error("账号不存在");
+           return R.error("Account does not exist");
         }
     }
 
 
     /**
-    * 获取用户的session用户信息
+    * Obtain session user information about the user
     */
     @RequestMapping("/session")
     public R getCurrmember(HttpServletRequest request){
         Integer id = (Integer)request.getSession().getAttribute("userId");
         MemberEntity member = memberService.selectById(id);
         if(member !=null){
-            //entity转view
+            //entity to view
             MemberView view = new MemberView();
-            BeanUtils.copyProperties( member , view );//把实体数据重构到view中
-
-            //修改对应字典表字段
+            BeanUtils.copyProperties( member , view );//Refactor the entity data into the view
+            //Refactor the entity data into the view
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
-            return R.error(511,"查不到数据");
+            return R.error(511,"No data available");
         }
     }
 
 
     /**
-    * 退出
+    * quit
     */
     @GetMapping(value = "logout")
     public R logout(HttpServletRequest request) {
         request.getSession().invalidate();
-        return R.ok("退出成功");
+        return R.ok("quit success");
     }
 
 
