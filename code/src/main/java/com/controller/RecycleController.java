@@ -27,8 +27,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 垃圾回收
- * 后端接口
+ * Garbage recycling
+ * Back-end interface
  * @author
  * @email
 */
@@ -46,73 +46,73 @@ public class RecycleController {
     private TokenService tokenService;
 
     @Autowired
-    private TransportService transportService;//运输
+    private TransportService transportService;
     @Autowired
-    private DictionaryService dictionaryService;//字典
+    private DictionaryService dictionaryService;
     @Autowired
-    private AnnouncementService announcementService;//公告
+    private AnnouncementService announcementService;
     @Autowired
-    private RecycleReserveService recycleReserveService;//垃圾出库申请
+    private RecycleReserveService recycleReserveService;
     @Autowired
-    private MemberService memberService;//用户
+    private MemberService memberService;
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;
 
 
     /**
-    * 后端列表
+    * back-end list
     */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request){
-        logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
+        logger.debug("page way:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永不会进入");
+            return R.error(511,"Will never enter");
         else if("用户".equals(role))
             params.put("memberId",request.getSession().getAttribute("userId"));
         params.put("recycleDeleteStart",1);params.put("recycleDeleteEnd",1);
         CommonUtil.checkMap(params);
         PageUtils page = recycleService.queryPage(params);
 
-        //字典表数据转换
+        //Dictionary table data conversion
         List<RecycleView> list =(List<RecycleView>)page.getList();
         for(RecycleView c:list){
-            //修改对应字典表字段
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * back-end detail
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
-        logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
+        logger.debug("info way:,,Controller:{},,id:{}",this.getClass().getName(),id);
         RecycleEntity recycle = recycleService.selectById(id);
         if(recycle !=null){
-            //entity转view
+            //entity to view
             RecycleView view = new RecycleView();
-            BeanUtils.copyProperties( recycle , view );//把实体数据重构到view中
-            //修改对应字典表字段
+            BeanUtils.copyProperties( recycle , view );//Dictionary table data conversion
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
-            return R.error(511,"查不到数据");
+            return R.error(511,"No data available");
         }
 
     }
 
     /**
-    * 后端保存
+    * back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody RecycleEntity recycle, HttpServletRequest request){
-        logger.debug("save方法:,,Controller:{},,recycle:{}",this.getClass().getName(),recycle.toString());
+        logger.debug("save way:,,Controller:{},,recycle:{}",this.getClass().getName(),recycle.toString());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
+            return R.error(511,"Never enter");
 
         Wrapper<RecycleEntity> queryWrapper = new EntityWrapper<RecycleEntity>()
             .eq("recycle_name", recycle.getrecycleName())
@@ -122,7 +122,7 @@ public class RecycleController {
             .eq("recycle_delete", recycle.getrecycleDelete())
             ;
 
-        logger.info("sql语句:"+queryWrapper.getSqlSegment());
+        logger.info("sql language:"+queryWrapper.getSqlSegment());
         RecycleEntity recycleEntity = recycleService.selectOne(queryWrapper);
         if(recycleEntity ==null){
             recycle.setrecycleDelete(1);
@@ -131,38 +131,38 @@ public class RecycleController {
             recycleService.insert(recycle);
             return R.ok();
         }else {
-            return R.error(511,"表中有相同数据");
+            return R.error(511,"The table has the same data");
         }
     }
 
     /**
-    * 后端修改
+    * back-end change
     */
     @RequestMapping("/update")
     public R update(@RequestBody RecycleEntity recycle, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.debug("update方法:,,Controller:{},,recycle:{}",this.getClass().getName(),recycle.toString());
+        logger.debug("update way:,,Controller:{},,recycle:{}",this.getClass().getName(),recycle.toString());
         RecycleEntity oldRecycleEntity = recycleService.selectById(recycle.getId());//查询原先数据
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
+//            return R.error(511,"The table has the same data");
         if("".equals(recycle.getrecyclePhoto()) || "null".equals(recycle.getrecyclePhoto())){
                 recycle.setrecyclePhoto(null);
         }
 
-            recycleService.updateById(recycle);//根据id更新
+            recycleService.updateById(recycle);
             return R.ok();
     }
 
 
 
     /**
-    * 删除
+    * deleete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
         logger.debug("delete:,,Controller:{},,ids:{}",this.getClass().getName(),ids.toString());
-        List<RecycleEntity> oldrecycleList = recycleService.selectBatchIds(Arrays.asList(ids));//要删除的数据
+        List<RecycleEntity> oldrecycleList = recycleService.selectBatchIds(Arrays.asList(ids));
         ArrayList<RecycleEntity> list = new ArrayList<>();
         for(Integer id:ids){
             RecycleEntity recycleEntity = new RecycleEntity();
@@ -179,7 +179,7 @@ public class RecycleController {
 
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
@@ -187,62 +187,62 @@ public class RecycleController {
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<RecycleEntity> recycleList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<RecycleEntity> recycleList = new ArrayList<>();//Batch upload
+            Map<String, List<String>> seachFields= new HashMap<>();//Batch upload
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
-                return R.error(511,"该文件没有后缀");
+                return R.error(511,"The file has no suffix");
             }else{
                 String suffix = fileName.substring(lastIndexOf);
                 if(!".xls".equals(suffix)){
-                    return R.error(511,"只支持后缀为xls的excel文件");
+                    return R.error(511,"Only excel files whose suffix is xls are supported");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);
                     File file = new File(resource.getFile());
                     if(!file.exists()){
-                        return R.error(511,"找不到上传文件，请联系管理员");
+                        return R.error(511,"Unable to find upload file, please contact administrator");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());// Read the xls file
+                        dataList.remove(0);// Delete the first line because the first line is the prompt
                         for(List<String> data:dataList){
                             //循环
                             RecycleEntity recycleEntity = new RecycleEntity();
-//                            recycleEntity.setrecycleName(data.get(0));                    //垃圾回收名称 要改的
-//                            recycleEntity.setrecycleUuidNumber(data.get(0));                    //垃圾回收编号 要改的
-//                            recycleEntity.setrecyclePhoto("");//详情和图片
-//                            recycleEntity.setrecycleAddress(data.get(0));                    //垃圾回收地点 要改的
-//                            recycleEntity.setrecycleTypes(Integer.valueOf(data.get(0)));   //垃圾回收类型 要改的
-//                            recycleEntity.setrecycleKucunNumber(Integer.valueOf(data.get(0)));   //垃圾回收库存 要改的
-//                            recycleEntity.setrecycleTime(sdf.parse(data.get(0)));          //入库时间 要改的
-//                            recycleEntity.setrecycleContent("");//详情和图片
-//                            recycleEntity.setrecycleDelete(1);//逻辑删除字段
-//                            recycleEntity.setInsertTime(date);//时间
-//                            recycleEntity.setCreateTime(date);//时间
+//                            recycleEntity.setrecycleName(data.get(0));                    
+//                            recycleEntity.setrecycleUuidNumber(data.get(0));                    
+//                            recycleEntity.setrecyclePhoto("");
+//                            recycleEntity.setrecycleAddress(data.get(0));                   
+//                            recycleEntity.setrecycleTypes(Integer.valueOf(data.get(0)));  
+//                            recycleEntity.setrecycleKucunNumber(Integer.valueOf(data.get(0)));   
+//                            recycleEntity.setrecycleTime(sdf.parse(data.get(0)));          
+//                            recycleEntity.setrecycleContent("");
+//                            recycleEntity.setrecycleDelete(1);
+//                            recycleEntity.setInsertTime(date);
+//                            recycleEntity.setCreateTime(date);
                             recycleList.add(recycleEntity);
 
 
-                            //把要查询是否重复的字段放入map中
-                                //垃圾回收编号
+                            //Put the field you want to query for duplicates into the map
+                                //Garbage collection number
                                 if(seachFields.containsKey("recycleUuidNumber")){
                                     List<String> recycleUuidNumber = seachFields.get("recycleUuidNumber");
-                                    recycleUuidNumber.add(data.get(0));//要改的
+                                    recycleUuidNumber.add(data.get(0));
                                 }else{
                                     List<String> recycleUuidNumber = new ArrayList<>();
-                                    recycleUuidNumber.add(data.get(0));//要改的
+                                    recycleUuidNumber.add(data.get(0));
                                     seachFields.put("recycleUuidNumber",recycleUuidNumber);
                                 }
                         }
 
-                        //查询是否重复
-                         //垃圾回收编号
+                        //Check whether duplicate
+                         //Garbage collection number
                         List<RecycleEntity> recycleEntities_recycleUuidNumber = recycleService.selectList(new EntityWrapper<RecycleEntity>().in("recycle_uuid_number", seachFields.get("recycleUuidNumber")).eq("recycle_delete", 1));
                         if(recycleEntities_recycleUuidNumber.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(RecycleEntity s:recycleEntities_recycleUuidNumber){
                                 repeatFields.add(s.getrecycleUuidNumber());
                             }
-                            return R.error(511,"数据库的该表中的 [垃圾回收编号] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The garbage collection Number field in the table of the database already exists:"+repeatFields.toString());
                         }
                         recycleService.insertBatch(recycleList);
                         return R.ok();
@@ -251,7 +251,7 @@ public class RecycleController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannot be inserted in batches, contact the administrator");
         }
     }
 
