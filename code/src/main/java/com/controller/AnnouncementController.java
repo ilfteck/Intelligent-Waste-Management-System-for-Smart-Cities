@@ -27,8 +27,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 公告
- * 后端接口
+ * announcement
+ * Back-end interface
  * @author
  * @email
 */
@@ -46,17 +46,17 @@ public class AnnouncementController {
     private TokenService tokenService;
 
     @Autowired
-    private TransportService transportService;//运输
+    private TransportService transportService;//transport
     @Autowired
-    private DictionaryService dictionaryService;//字典
+    private DictionaryService dictionaryService;//dictionary
     @Autowired
-    private RecycleService recycleService;//垃圾回收
+    private RecycleService recycleService;//recycle
     @Autowired
-    private RecycleReserveService recycleReserveService;//垃圾出库申请
+    private RecycleReserveService recycleReserveService;//recycleReserve
     @Autowired
-    private MemberService memberService;//用户
+    private MemberService memberService;//User
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;//Management
 
 
     /**
@@ -64,61 +64,61 @@ public class AnnouncementController {
     */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request){
-        logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
+        logger.debug("pageway:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永不会进入");
-        else if("用户".equals(role))
+            return R.error(511,"Will never enter");
+        else if("User".equals(role))
             params.put("memberId",request.getSession().getAttribute("userId"));
         CommonUtil.checkMap(params);
         PageUtils page = announcementService.queryPage(params);
 
-        //字典表数据转换
+        //Dictionary table data conversion
         List<AnnouncementView> list =(List<AnnouncementView>)page.getList();
         for(AnnouncementView c:list){
-            //修改对应字典表字段
+            //Example Modify the corresponding dictionary table fields
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * Look at it from behind
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
         logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
         AnnouncementEntity announcement = announcementService.selectById(id);
         if(announcement !=null){
-            //entity转view
+            //entity change view
             AnnouncementView view = new AnnouncementView();
-            BeanUtils.copyProperties( announcement , view );//把实体数据重构到view中
-            //修改对应字典表字段
+            BeanUtils.copyProperties( announcement , view );//Refactor the entity data into the view
+            //Example Modify the corresponding dictionary table fields
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
-            return R.error(511,"查不到数据");
+            return R.error(511,"No data available");
         }
 
     }
 
     /**
-    * 后端保存
+    * Back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody AnnouncementEntity announcement, HttpServletRequest request){
-        logger.debug("save方法:,,Controller:{},,announcement:{}",this.getClass().getName(),announcement.toString());
+        logger.debug("save way:,,Controller:{},,announcement:{}",this.getClass().getName(),announcement.toString());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
+            return R.error(511,"No data available");
 
         Wrapper<AnnouncementEntity> queryWrapper = new EntityWrapper<AnnouncementEntity>()
             .eq("announcement_name", announcement.getannouncementName())
             .eq("announcement_types", announcement.getannouncementTypes())
             ;
 
-        logger.info("sql语句:"+queryWrapper.getSqlSegment());
+        logger.info("sql language:"+queryWrapper.getSqlSegment());
         AnnouncementEntity announcementEntity = announcementService.selectOne(queryWrapper);
         if(announcementEntity ==null){
             announcement.setInsertTime(new Date());
@@ -126,38 +126,38 @@ public class AnnouncementController {
             announcementService.insert(announcement);
             return R.ok();
         }else {
-            return R.error(511,"表中有相同数据");
+            return R.error(511,"The table has the same data");
         }
     }
 
     /**
-    * 后端修改
+    * Back-end modification
     */
     @RequestMapping("/update")
     public R update(@RequestBody AnnouncementEntity announcement, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         logger.debug("update方法:,,Controller:{},,announcement:{}",this.getClass().getName(),announcement.toString());
-        AnnouncementEntity oldAnnouncementEntity = announcementService.selectById(announcement.getId());//查询原先数据
+        AnnouncementEntity oldAnnouncementEntity = announcementService.selectById(announcement.getId());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
+//            return R.error(511,"No data available");
         if("".equals(announcement.getannouncementPhoto()) || "null".equals(announcement.getannouncementPhoto())){
                 announcement.setannouncementPhoto(null);
         }
 
-            announcementService.updateById(announcement);//根据id更新
+            announcementService.updateById(announcement);//Update by id
             return R.ok();
     }
 
 
 
     /**
-    * 删除
+    * delete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
         logger.debug("delete:,,Controller:{},,ids:{}",this.getClass().getName(),ids.toString());
-        List<AnnouncementEntity> oldannouncementList = announcementService.selectBatchIds(Arrays.asList(ids));//要删除的数据
+        List<AnnouncementEntity> oldannouncementList = announcementService.selectBatchIds(Arrays.asList(ids));//Data to delete
         announcementService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();
@@ -165,48 +165,47 @@ public class AnnouncementController {
 
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
-        logger.debug("batchInsert方法:,,Controller:{},,fileName:{}",this.getClass().getName(),fileName);
+        logger.debug("batchInsert way:,,Controller:{},,fileName:{}",this.getClass().getName(),fileName);
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<AnnouncementEntity> announcementList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<AnnouncementEntity> announcementList = new ArrayList<>();//Uploaded stuff
+            Map<String, List<String>> seachFields= new HashMap<>();//The field to be queried
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
-                return R.error(511,"该文件没有后缀");
+                return R.error(511,"The file has no suffix");
             }else{
                 String suffix = fileName.substring(lastIndexOf);
                 if(!".xls".equals(suffix)){
-                    return R.error(511,"只支持后缀为xls的excel文件");
+                    return R.error(511,"Only excel files whose suffix is xls are supported");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//Get file path
                     File file = new File(resource.getFile());
                     if(!file.exists()){
-                        return R.error(511,"找不到上传文件，请联系管理员");
+                        return R.error(511,"Unable to find upload file, please contact administrator");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());
+                        dataList.remove(0);
                         for(List<String> data:dataList){
-                            //循环
-                            AnnouncementEntity announcementEntity = new AnnouncementEntity();
-//                            announcementEntity.setannouncementName(data.get(0));                    //公告名称 要改的
-//                            announcementEntity.setannouncementPhoto("");//详情和图片
-//                            announcementEntity.setannouncementTypes(Integer.valueOf(data.get(0)));   //公告类型 要改的
-//                            announcementEntity.setInsertTime(date);//时间
-//                            announcementEntity.setannouncementContent("");//详情和图片
-//                            announcementEntity.setCreateTime(date);//时间
+                            //loop    AnnouncementEntity announcementEntity = new AnnouncementEntity();
+//                            announcementEntity.setannouncementName(data.get(0));                    //Announcement name to be changed
+//                            announcementEntity.setannouncementPhoto("");//detail and map
+//                            announcementEntity.setannouncementTypes(Integer.valueOf(data.get(0)));   //Announcement type to be changed
+//                            announcementEntity.setInsertTime(date);//Time
+//                            announcementEntity.setannouncementContent("");//detail and map
+//                            announcementEntity.setCreateTime(date);//Time
                             announcementList.add(announcementEntity);
 
 
-                            //把要查询是否重复的字段放入map中
+                            //Put the field you want to query for duplicates into the map
                         }
 
-                        //查询是否重复
+                        //Check whether duplicate
                         announcementService.insertBatch(announcementList);
                         return R.ok();
                     }
@@ -214,7 +213,7 @@ public class AnnouncementController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannot be inserted in batches, contact the administrator");
         }
     }
 
