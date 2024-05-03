@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.jlwl</groupId>
-    <!-- 导入项目的名称 -->
+    <!-- The name of the imported project -->
     <artifactId>GarbageClassificationAndRecycling</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>GarbageClassificationAndRecycling</name>
@@ -36,13 +36,13 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
-        <!--访问静态资源-->
+        <!--Access static resources-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!--热部署-->
+        <!--Hot deployment-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -114,14 +114,14 @@
             <version>4.0</version>
         </dependency>-->
 
-        <!-- 百度人工智能 -->
+        <!-- Baidu Artificial Intelligence -->
         <dependency>
             <groupId>com.baidu.aip</groupId>
             <artifactId>java-sdk</artifactId>
             <version>4.4.1</version>
         </dependency>
 
-        <!-- poi高版本额外包 -->
+        <!-- poi high version extra package -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
