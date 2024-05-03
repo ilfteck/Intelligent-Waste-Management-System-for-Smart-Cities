@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
 /**
-* @author yangliyuan
-* @version 创建时间：2020年2月7日 下午8:36:05
+* @author Evan
+* @version 创建时间：2024年2月7日 下午8:36:05
 * 类说明 : 
 */
 @TableName("config")
