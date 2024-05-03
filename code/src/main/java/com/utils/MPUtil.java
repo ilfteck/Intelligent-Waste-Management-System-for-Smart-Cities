@@ -12,19 +12,19 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 
 /**
- * Mybatis-Plus工具类
+ * Mybatis-Plus
  */
 public class MPUtil {
 	public static final char UNDERLINE = '_';
 
 	
-	//mybatis plus allEQ 表达式转换
+	//mybatis plus allEQ 
 		public static Map allEQMapPre(Object bean,String pre) {
 		   Map<String, Object> map =BeanUtil.beanToMap(bean);
 		  return camelToUnderlineMap(map,pre);
 	   }
 
-		//mybatis plus allEQ 表达式转换
+		//mybatis plus allEQ 
 		public static Map allEQMap(Object bean) {
 		   Map<String, Object> map =BeanUtil.beanToMap(bean);
 		   return camelToUnderlineMap(map,"");
@@ -135,7 +135,7 @@ public class MPUtil {
 	
 	
 	/**
-	 * 驼峰格式字符串转换为下划线格式字符串
+	 *The hump format string is converted to an underscore format string
 	 * 
 	 * @param param
 	 * @return
