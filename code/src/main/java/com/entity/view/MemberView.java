@@ -8,17 +8,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.io.Serializable;
 
 /**
-* 用户
-* 后端返回视图实体辅助类
-* （通常后端关联的表或者自定义的字段需要返回使用）
+* User
+* The back end returns the view entity helper class
+* (Usually back-end associated tables or custom fields need to be returned for use)
 */
 @TableName("member")
 public class MemberView extends MemberEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	//当前表
+	//Current table
 	/**
-	* 性别的值
+	* Gender value
 	*/
 	@ColumnInfo(comment="性别的字典表值",type="varchar(200)")
 	private String sexValue;
@@ -41,16 +41,11 @@ public class MemberView extends MemberEntity implements Serializable {
 
 
 
-	//当前表的
-	/**
-	* 获取： 性别的值
-	*/
+	
 	public String getSexValue() {
 		return sexValue;
 	}
-	/**
-	* 设置： 性别的值
-	*/
+	
 	public void setSexValue(String sexValue) {
 		this.sexValue = sexValue;
 	}
