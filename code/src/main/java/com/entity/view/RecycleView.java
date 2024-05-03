@@ -8,19 +8,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.io.Serializable;
 
 /**
-* 垃圾回收
-* 后端返回视图实体辅助类
-* （通常后端关联的表或者自定义的字段需要返回使用）
+* Garbage collection
+* The back end returns the view entity helper class
+* (Usually back-end associated tables or custom fields need to be returned for use)
+
 */
 @TableName("recycle")
 public class RecycleView extends RecycleEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	//当前表
+	
 	/**
-	* 垃圾回收类型的值
+	* The value of the garbage collection type
 	*/
-	@ColumnInfo(comment="垃圾回收类型的字典表值",type="varchar(200)")
+	@ColumnInfo(comment="The value of the garbage collection type",type="varchar(200)")
 	private String recycleValue;
 
 
@@ -41,16 +42,12 @@ public class RecycleView extends RecycleEntity implements Serializable {
 
 
 
-	//当前表的
-	/**
-	* 获取： 垃圾回收类型的值
-	*/
+	
+
 	public String getrecycleValue() {
 		return recycleValue;
 	}
-	/**
-	* 设置： 垃圾回收类型的值
-	*/
+	
 	public void setrecycleValue(String recycleValue) {
 		this.recycleValue = recycleValue;
 	}
