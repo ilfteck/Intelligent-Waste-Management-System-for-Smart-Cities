@@ -19,7 +19,7 @@ public interface DictionaryService extends IService<DictionaryEntity> {
     */
      PageUtils queryPage(Map<String, Object> params);
       /**
-      * 字典表转换
+      * Dictionary table conversion
       * @param obj
       */
      void dictionaryConvert(Object obj, HttpServletRequest request);
