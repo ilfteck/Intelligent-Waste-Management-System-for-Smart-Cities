@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 文件导入到处
+ * PoiUtil
  */
 public class PoiUtil {
     /**
-     * 导入
+     * PoiUtil
      *
      * @param url
      * @return
@@ -25,26 +25,26 @@ public class PoiUtil {
      */
     public static List<List<String>> poiImport(String url) throws Exception {
         List<List<String>> list = new ArrayList<>();
-        // 创建Excel 读取文件内容
+        //Create Excel to read file contents
         HSSFWorkbook workbook = new HSSFWorkbook(FileUtils.openInputStream(new File(url)));
         /**
-         * 第一种方式读取Sheet页
+         * The first way reads the Sheet page
          */
 //      HSSFSheet sheet = workbook.getSheet("Sheet0");
         /**
-         * 第二种方式读取Sheet页
+         * The second way reads the Sheet page
          */
-        HSSFSheet sheet = workbook.getSheetAt(0);//获取工作表
+        HSSFSheet sheet = workbook.getSheetAt(0);//Get worksheet
         for (int i = 0; i < sheet.getLastRowNum()+1; i++) {
-            HSSFRow row = sheet.getRow(i);//获取行
-            List<String> rowlist = new ArrayList<>();//行数据
+            HSSFRow row = sheet.getRow(i);//Fetch row
+            List<String> rowlist = new ArrayList<>();//Row data
             for (int j = 0; j < row.getLastCellNum(); j++) {
                 HSSFCell cell = row.getCell(j);
                 cell.setCellType(Cell.CELL_TYPE_STRING);
                 String value = cell.getStringCellValue();
-                rowlist.add(value);//行中数据添加到行中
+                rowlist.add(value);//Row Data is added to the row
             }
-            list.add(rowlist);//将行数据添加到list中
+            list.add(rowlist);//Adds the row data to the list
         }
         return list;
     }
@@ -54,11 +54,11 @@ public class PoiUtil {
 
 
 
-    // 导出
+    // poiExport
     public static void poiExport(List<List<String>> list, String url) throws Exception {
-        //创建Excel工作薄
+        //workbook
         HSSFWorkbook workbook = new HSSFWorkbook();
-        //创建一个工作表shheet
+        //Create a worksheet shheet
         HSSFSheet sheet = workbook.createSheet();
         for (int i = 0; i < list.size(); i++) {
             HSSFRow row = sheet.createRow(i);
@@ -77,12 +77,12 @@ public class PoiUtil {
 
     public static void main(String[] args) {
         try {
-            //导入
+            //export
             List<List<String>> lists = PoiUtil.poiImport("C:/Users/Administrator/Desktop/工作1.xls");
             System.out.println();
 
 
-            //导出
+            //expore
 
             PoiUtil.poiExport(lists, "C:/Users/Administrator/Desktop/工作1.xls");
 
