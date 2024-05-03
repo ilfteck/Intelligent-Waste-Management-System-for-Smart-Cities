@@ -3,7 +3,7 @@ package com.annotation;
 import java.lang.annotation.*;
 
 /**
- * 忽略Token验证
+ * Ignore Token authentication
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
