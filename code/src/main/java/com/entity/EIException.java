@@ -2,7 +2,7 @@
 package com.entity;
 
 /**
- * 自定义异常
+ * Custom exception
  */
 public class EIException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
