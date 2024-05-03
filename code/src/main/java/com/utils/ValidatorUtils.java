@@ -11,7 +11,7 @@ import javax.validation.Validator;
 import com.entity.EIException;
 
 /**
- * hibernate-validator校验工具类
+ * hibernate-validator
  */
 public class ValidatorUtils {
     private static Validator validator;
@@ -21,10 +21,10 @@ public class ValidatorUtils {
     }
 
     /**
-     * 校验对象
-     * @param object        待校验对象
-     * @param groups        待校验的组
-     * @throws EIException  校验不通过，则报EIException异常
+     * Check object
+     * @param object        Check object
+     * @param groups        The group to be verified
+     * @throws EIException  If the verification fails, an EIException Exception is reported
      */
     public static void validateEntity(Object object, Class<?>... groups)
             throws EIException {
