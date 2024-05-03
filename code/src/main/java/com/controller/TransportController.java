@@ -27,8 +27,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 运输
- * 后端接口
+ * transport
+ * Back-end interface
  * @author
  * @email
 */
@@ -46,62 +46,61 @@ public class TransportController {
     private TokenService tokenService;
 
     @Autowired
-    private DictionaryService dictionaryService;//字典
+    private DictionaryService dictionaryService;
     @Autowired
-    private AnnouncementService announcementService;//公告
+    private AnnouncementService announcementService;
     @Autowired
-    private RecycleService recycleService;//垃圾回收
+    private RecycleService recycleService;
     @Autowired
-    private RecycleReserveService recycleReserveService;//垃圾出库申请
+    private RecycleReserveService recycleReserveService;
     @Autowired
-    private MemberService memberService;//用户
+    private MemberService memberService;
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;
 
 
     /**
-    * 后端列表
+    * back-end list
     */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params, HttpServletRequest request){
-        logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
+        logger.debug("page way:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永不会进入");
-        else if("用户".equals(role))
+            return R.error(511,"never enter");
+        else if("User".equals(role))
             params.put("memberId",request.getSession().getAttribute("userId"));
         params.put("transportDeleteStart",1);params.put("transportDeleteEnd",1);
         CommonUtil.checkMap(params);
         PageUtils page = transportService.queryPage(params);
 
-        //字典表数据转换
+        //Dictionary table data conversion
         List<TransportView> list =(List<TransportView>)page.getList();
         for(TransportView c:list){
-            //修改对应字典表字段
+            //Dictionary table data conversion
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * back-end detail
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
-        logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
+        logger.debug("info way:,,Controller:{},,id:{}",this.getClass().getName(),id);
         TransportEntity transport = transportService.selectById(id);
         if(transport !=null){
-            //entity转view
+            //entity to view
             TransportView view = new TransportView();
-            BeanUtils.copyProperties( transport , view );//把实体数据重构到view中
-            //级联表 垃圾出库申请
-            //级联表
+            BeanUtils.copyProperties( transport , view );//Refactor the entity data into the view
+            //Refactor the entity data into the view
             RecycleReserveEntity recycleYuyue = recycleReserveService.selectById(transport.getrecycleYuyueId());
             if(recycleYuyue != null){
-            BeanUtils.copyProperties( recycleYuyue , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});//把级联的数据添加到view中,并排除id和创建时间字段,当前表的级联注册表
+            BeanUtils.copyProperties( recycleYuyue , view ,new String[]{ "id", "createTime", "insertTime", "updateTime"});//Refactor the entity data into the view
             view.setrecycleYuyueId(recycleYuyue.getId());
             }
-            //修改对应字典表字段
+            //Refactor the entity data into the view
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
@@ -111,15 +110,15 @@ public class TransportController {
     }
 
     /**
-    * 后端保存
+    * back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody TransportEntity transport, HttpServletRequest request){
-        logger.debug("save方法:,,Controller:{},,transport:{}",this.getClass().getName(),transport.toString());
+        logger.debug("saveway:,,Controller:{},,transport:{}",this.getClass().getName(),transport.toString());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
+            return R.error(511,"never enter");
 
         Wrapper<TransportEntity> queryWrapper = new EntityWrapper<TransportEntity>()
             .eq("recycle_reserve_id", transport.getrecycleYuyueId())
@@ -130,7 +129,7 @@ public class TransportController {
             .eq("transport_delete", transport.gettransportDelete())
             ;
 
-        logger.info("sql语句:"+queryWrapper.getSqlSegment());
+        logger.info("sql language:"+queryWrapper.getSqlSegment());
         TransportEntity transportEntity = transportService.selectOne(queryWrapper);
         if(transportEntity ==null){
             transport.settransportDelete(1);
@@ -139,38 +138,38 @@ public class TransportController {
             transportService.insert(transport);
             return R.ok();
         }else {
-            return R.error(511,"表中有相同数据");
+            return R.error(511,"The table has the same data");
         }
     }
 
     /**
-    * 后端修改
+    * back-end change
     */
     @RequestMapping("/update")
     public R update(@RequestBody TransportEntity transport, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        logger.debug("update方法:,,Controller:{},,transport:{}",this.getClass().getName(),transport.toString());
-        TransportEntity oldTransportEntity = transportService.selectById(transport.getId());//查询原先数据
+        logger.debug("update way:,,Controller:{},,transport:{}",this.getClass().getName(),transport.toString());
+        TransportEntity oldTransportEntity = transportService.selectById(transport.getId());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
+//            return R.error(511,"never enter");
         if("".equals(transport.gettransportPhoto()) || "null".equals(transport.gettransportPhoto())){
                 transport.settransportPhoto(null);
         }
 
-            transportService.updateById(transport);//根据id更新
+            transportService.updateById(transport);
             return R.ok();
     }
 
 
 
     /**
-    * 删除
+    * delete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
         logger.debug("delete:,,Controller:{},,ids:{}",this.getClass().getName(),ids.toString());
-        List<TransportEntity> oldtransportList = transportService.selectBatchIds(Arrays.asList(ids));//要删除的数据
+        List<TransportEntity> oldtransportList = transportService.selectBatchIds(Arrays.asList(ids));//delete data
         ArrayList<TransportEntity> list = new ArrayList<>();
         for(Integer id:ids){
             TransportEntity transportEntity = new TransportEntity();
@@ -187,7 +186,7 @@ public class TransportController {
 
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
@@ -195,43 +194,43 @@ public class TransportController {
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<TransportEntity> transportList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<TransportEntity> transportList = new ArrayList<>();//Batch upload
+            Map<String, List<String>> seachFields= new HashMap<>();
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
-                return R.error(511,"该文件没有后缀");
+                return R.error(511,"The file has no suffix");
             }else{
                 String suffix = fileName.substring(lastIndexOf);
                 if(!".xls".equals(suffix)){
-                    return R.error(511,"只支持后缀为xls的excel文件");
+                    return R.error(511,"Only excel files whose suffix is xls are supported");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//Only excel files whose suffix is xls are supported
                     File file = new File(resource.getFile());
                     if(!file.exists()){
-                        return R.error(511,"找不到上传文件，请联系管理员");
+                        return R.error(511,"Unable to find upload file, please contact administrator");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//Unable to find upload file, please contact administrator
+                        dataList.remove(0);//Unable to find upload file, please contact administrator
                         for(List<String> data:dataList){
-                            //循环
+                            //ioop
                             TransportEntity transportEntity = new TransportEntity();
-//                            transportEntity.setrecycleYuyueId(Integer.valueOf(data.get(0)));   //垃圾运输 要改的
-//                            transportEntity.settransportName(data.get(0));                    //运输名称 要改的
-//                            transportEntity.settransportUuidNumber(data.get(0));                    //运输编号 要改的
-//                            transportEntity.settransportPhoto("");//详情和图片
-//                            transportEntity.settransportAddress(data.get(0));                    //运输地点 要改的
-//                            transportEntity.settransportTypes(Integer.valueOf(data.get(0)));   //运输类型 要改的
-//                            transportEntity.settransportMudiAddress(data.get(0));                    //运输目的地 要改的
-//                            transportEntity.settransportContent("");//详情和图片
-//                            transportEntity.settransportDelete(1);//逻辑删除字段
-//                            transportEntity.setInsertTime(date);//时间
-//                            transportEntity.setCreateTime(date);//时间
+//                            transportEntity.setrecycleYuyueId(Integer.valueOf(data.get(0)));   
+//                            transportEntity.settransportName(data.get(0));                    
+//                            transportEntity.settransportUuidNumber(data.get(0));                    
+//                            transportEntity.settransportPhoto("");
+//                            transportEntity.settransportAddress(data.get(0));                   
+//                            transportEntity.settransportTypes(Integer.valueOf(data.get(0)));   
+//                            transportEntity.settransportMudiAddress(data.get(0));                    
+//                            transportEntity.settransportContent("");
+//                            transportEntity.settransportDelete(1);
+//                            transportEntity.setInsertTime(date);
+//                            transportEntity.setCreateTime(date);
                             transportList.add(transportEntity);
 
 
-                            //把要查询是否重复的字段放入map中
-                                //运输编号
+                            //Put the field you want to query for duplicates into the map
+                                //number
                                 if(seachFields.containsKey("transportUuidNumber")){
                                     List<String> transportUuidNumber = seachFields.get("transportUuidNumber");
                                     transportUuidNumber.add(data.get(0));//要改的
@@ -242,15 +241,15 @@ public class TransportController {
                                 }
                         }
 
-                        //查询是否重复
-                         //运输编号
+                        //Put the field you want to query for duplicates into the map
+                         //number
                         List<TransportEntity> transportEntities_transportUuidNumber = transportService.selectList(new EntityWrapper<TransportEntity>().in("transport_uuid_number", seachFields.get("transportUuidNumber")).eq("transport_delete", 1));
                         if(transportEntities_transportUuidNumber.size() >0 ){
                             ArrayList<String> repeatFields = new ArrayList<>();
                             for(TransportEntity s:transportEntities_transportUuidNumber){
                                 repeatFields.add(s.gettransportUuidNumber());
                             }
-                            return R.error(511,"数据库的该表中的 [运输编号] 字段已经存在 存在数据为:"+repeatFields.toString());
+                            return R.error(511,"The [Transport number] field in the table of the database already exists:"+repeatFields.toString());
                         }
                         transportService.insertBatch(transportList);
                         return R.ok();
@@ -259,7 +258,7 @@ public class TransportController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannot be inserted in batches, contact the administrator");
         }
     }
 
