@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.entity.view.MemberView;
 
 /**
- * 用户 Dao 接口
+ * User Dao interface
  *
  * @author 
  */
