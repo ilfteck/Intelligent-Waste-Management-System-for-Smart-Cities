@@ -14,7 +14,7 @@ import com.service.MemberService;
 import com.entity.view.MemberView;
 
 /**
- * 用户 服务实现类
+ *MemberService
  */
 @Service("MemberService")
 @Transactional
