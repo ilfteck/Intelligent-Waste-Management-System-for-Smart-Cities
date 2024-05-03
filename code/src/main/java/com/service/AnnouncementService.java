@@ -6,13 +6,13 @@ import com.entity.AnnouncementEntity;
 import java.util.Map;
 
 /**
- * 公告 服务类
+ * AnnouncementService
  */
 public interface AnnouncementService extends IService<AnnouncementEntity> {
 
     /**
-    * @param params 查询参数
-    * @return 带分页的查询出来的数据
+    * @param params 
+    * @return Query data with paging
     */
      PageUtils queryPage(Map<String, Object> params);
 
