@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.entity.view.TransportView;
 
 /**
- * 运输 Dao 接口
+ * Transport Dao interface
  *
  * @author 
  */
