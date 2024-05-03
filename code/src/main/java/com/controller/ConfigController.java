@@ -22,7 +22,7 @@ import com.utils.R;
 import com.utils.ValidatorUtils;
 
 /**
- * 登录相关
+ * Login correlation
  */
 @RequestMapping("config")
 @RestController
@@ -32,7 +32,7 @@ public class ConfigController{
 	private ConfigService configService;
 
 	/**
-     * 列表
+     * list
      */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params,ConfigEntity config){
@@ -42,7 +42,7 @@ public class ConfigController{
     }
     
 	/**
-     * 列表
+     * list
      */
     @IgnoreAuth
     @RequestMapping("/list")
@@ -53,7 +53,7 @@ public class ConfigController{
     }
 
     /**
-     * 信息
+     * infoamtion
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") String id){
@@ -62,7 +62,7 @@ public class ConfigController{
     }
     
     /**
-     * 详情
+     * detail
      */
     @IgnoreAuth
     @RequestMapping("/detail/{id}")
@@ -72,7 +72,7 @@ public class ConfigController{
     }
     
     /**
-     * 根据name获取信息
+     *Get information by name
      */
     @RequestMapping("/info")
     public R infoByName(@RequestParam String name){
@@ -81,7 +81,7 @@ public class ConfigController{
     }
     
     /**
-     * 保存
+     * save
      */
     @PostMapping("/save")
     public R save(@RequestBody ConfigEntity config){
@@ -91,17 +91,17 @@ public class ConfigController{
     }
 
     /**
-     * 修改
+     * change
      */
     @RequestMapping("/update")
     public R update(@RequestBody ConfigEntity config){
 //        ValidatorUtils.validateEntity(config);
-        configService.updateById(config);//全部更新
+        configService.updateById(config);//Update all
         return R.ok();
     }
 
     /**
-     * 删除
+     * delete
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){
