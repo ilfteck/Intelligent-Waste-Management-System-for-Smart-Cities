@@ -3,11 +3,11 @@ package com.utils;
 import java.util.*;
 
 /**
- * 公共方法
+ * Public method
  */
 public class CommonUtil {
 	/**
-     * 获取随机字符串
+     * Get random string
      *
      * @param num
      * @return
@@ -25,7 +25,7 @@ public class CommonUtil {
 
 
     /**
-     * 检查map参数并添加缺失参数
+     * Check map parameters and add missing parameters
      * @param params
      * @return
      */
