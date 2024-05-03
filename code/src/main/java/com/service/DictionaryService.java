@@ -9,13 +9,13 @@ import org.springframework.lang.Nullable;
 import java.util.List;
 
 /**
- * 字典 服务类
+ * DictionaryService
  */
 public interface DictionaryService extends IService<DictionaryEntity> {
 
     /**
-    * @param params 查询参数
-    * @return 带分页的查询出来的数据
+    * @param params 
+    * @return 
     */
      PageUtils queryPage(Map<String, Object> params);
       /**
