@@ -23,7 +23,7 @@ public class InterceptorConfig extends WebMvcConfigurationSupport{
 	}
 	
 	/**
-	 * springboot 2.0配置WebMvcConfigurationSupport之后，会导致默认配置被覆盖，要访问静态资源需要重写addResourceHandlers方法
+	 * After WebMvcConfigurationSupport springboot 2.0 configuration, leads to the default configuration are covered, static resource needs to be rewritten to allow access to addResourceHandlers method
 	 */
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
