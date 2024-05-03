@@ -17,7 +17,7 @@ import com.utils.Query;
 
 
 /**
- * 系统用户
+ * configService
  * @author yangliyuan
  * @date 2019年10月10日 上午9:17:59
  */
