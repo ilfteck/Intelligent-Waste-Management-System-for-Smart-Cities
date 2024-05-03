@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.entity.view.RecycleView;
 
 /**
- * 垃圾回收 Dao 接口
+ * Garbage collection Dao interface
  *
  * @author 
  */
