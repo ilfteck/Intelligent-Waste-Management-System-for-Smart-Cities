@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.TransportDao">
 
-    <!-- 通用查询结果列 -->
+    <!-- Generic query result column -->
     <sql id="Base_Column_List">
         a.id as id
         ,a.recycle_reserve_id as recyclereserveId
@@ -20,7 +20,7 @@
     <select id="selectListView" parameterType="map" resultType="com.entity.view.TransportView" >
         SELECT
         <include refid="Base_Column_List" />
-        <!-- 级联表的字段 -->
+        <!-- Fields of the cascade table -->
         ,recyclereserve.recycle_reserve_uuid_number as recyclereserveUuidNumber
         ,recyclereserve.member_id as recyclereservememberId
         ,recyclereserve.recycle_reserve_text as recyclereserveText
@@ -78,7 +78,7 @@
                 <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
             </if>
 
-                <!-- 判断垃圾出库申请的id不为空 -->
+                <!-- The id of the garbage dump application is not empty -->
             <if test=" params.recyclereserveIdNotNull != '' and params.recyclereserveIdNotNull != null and params.recyclereserveIdNotNull != 'null' ">
                 and a.recycle_reserve_id IS NOT NULL
             </if>
