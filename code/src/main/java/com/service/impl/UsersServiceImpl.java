@@ -19,7 +19,7 @@ import com.utils.Query;
 
 
 /**
- * 系统用户
+ * userService
  * @author
  */
 @Service("userService")
