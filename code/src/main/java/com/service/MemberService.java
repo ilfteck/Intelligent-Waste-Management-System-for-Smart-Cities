@@ -6,13 +6,13 @@ import com.entity.MemberEntity;
 import java.util.Map;
 
 /**
- * 用户 服务类
+ * MemberService
  */
 public interface MemberService extends IService<MemberEntity> {
 
     /**
-    * @param params 查询参数
-    * @return 带分页的查询出来的数据
+    * @param params 
+    * @return 
     */
      PageUtils queryPage(Map<String, Object> params);
 
