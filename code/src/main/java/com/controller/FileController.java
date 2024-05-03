@@ -34,7 +34,7 @@ import com.service.ConfigService;
 import com.utils.R;
 
 /**
- * 上传文件映射表
+ * The file mapping table was uploaded
  */
 @RestController
 @RequestMapping("file")
@@ -43,12 +43,12 @@ public class FileController{
 	@Autowired
     private ConfigService configService;
 	/**
-	 * 上传文件
+	 * upload file
 	 */
 	@RequestMapping("/upload")
 	public R upload(@RequestParam("file") MultipartFile file,String type) throws Exception {
 		if (file.isEmpty()) {
-			throw new EIException("上传文件不能为空");
+			throw new EIException("The uploaded file cannot be empty");
 		}
 		String fileExt = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
 		File path = new File(ResourceUtils.getURL("classpath:static").getPath());
@@ -77,7 +77,7 @@ public class FileController{
 	}
 	
 	/**
-	 * 下载文件
+	 * download file
 	 */
 	@IgnoreAuth
 	@RequestMapping("/download")
