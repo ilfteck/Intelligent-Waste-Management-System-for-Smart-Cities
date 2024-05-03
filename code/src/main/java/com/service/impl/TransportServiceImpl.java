@@ -14,7 +14,7 @@ import com.service.TransportService;
 import com.entity.view.TransportView;
 
 /**
- * 运输 服务实现类
+ * TransportService
  */
 @Service("TransportService")
 @Transactional
