@@ -24,7 +24,7 @@ import com.service.DictionaryService;
 import com.entity.view.DictionaryView;
 
 /**
- * 字典 服务实现类
+ * dictionaryService
  */
 @Service("dictionaryService")
 @Transactional
@@ -38,13 +38,13 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, Dictionary
     }
 
      /**
-     * 赋值给字典表
-     * @param obj view对象
+     * dictionaryConvert
+     * @param obj view
      */
     public void dictionaryConvert(Object obj, HttpServletRequest request) {
         try {
             if (obj == null) return;
-            //当前view和entity中的所有types的字段
+            //Fields of all types in the current view and entity
             List<String> fieldNameList = new ArrayList<>();
             Class tempClass = obj.getClass();
             while (tempClass !=null) {
@@ -55,34 +55,32 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, Dictionary
                         fieldNameList.add(f.getName());
                     }
                 }
-                tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
+                tempClass = tempClass.getSuperclass(); //Get the parent class and assign it to yourself
             }
 
-            // 获取监听器中的字典表
+            // servletContext
 //            ServletContext servletContext = ContextLoader.getCurrentWebApplicationContext().getServletContext();
             ServletContext servletContext = request.getServletContext();
             Map<String, Map<Integer, String>> dictionaryMap= (Map<String, Map<Integer, String>>) servletContext.getAttribute("dictionaryMap");
 
-            //通过Types的值给Value字段赋值
+            //Assign a Value to the value field by the value of Types
             for (String s : fieldNameList) {
                 Field types = null;
                 if(hasField(obj.getClass(),s)){
-                    //判断view中有没有这个字段,有就通过反射取出字段
-                    types= obj.getClass().getDeclaredField(s);//获取Types私有字段
+                    //To determine if this field is present in the view, use reflection to retrieve the field
+                    types= obj.getClass().getDeclaredField(s);//Gets the Types private field
                 }else{
-                    //本表中没有这个字段,说明它是父表中的字段,也就是entity中的字段,从entity中取值
-                    types=obj.getClass().getSuperclass().getDeclaredField(s);
+                    // If this field does not exist in the table, it is an field in the parent table, that is, in entity. The value is taken from entity                    types=obj.getClass().getSuperclass().getDeclaredField(s);
                 }
-                Field value = obj.getClass().getDeclaredField(s.replace("Types", "Value"));//获取value私有字段
-                //设置权限
+                Field value = obj.getClass().getDeclaredField(s.replace("Types", "Value"));//Gets the value private field
+                //Set permissions
                 types.setAccessible(true);
                 value.setAccessible(true);
 
-                //赋值
-                if (StringUtil.isNotEmpty(String.valueOf(types.get(obj)))) { //types的值不为空
+                //Assign
+                if (StringUtil.isNotEmpty(String.valueOf(types.get(obj)))) { //The value of types is not null
                     int i = Integer.parseInt(String.valueOf(types.get(obj)));//type
-                    //把s1字符中的所有大写转小写,并在前面加 _
-                    char[] chars = s.toCharArray();
+                   // Convert all uppercase s1 characters to lowercase and prefix them with _                    char[] chars = s.toCharArray();
                     StringBuffer sbf = new StringBuffer();
                     for(int  b=0; b< chars.length; b++){
                         char ch = chars[b];
@@ -95,7 +93,7 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, Dictionary
                     String s2 = dictionaryMap.get(sbf.toString()).get(i);
                     value.set(obj, s2);
                 } else {
-                    new Exception("字典表赋值出现问题::::"+value.getName());
+                    new Exception("There is a problem with dictionary table assignment::::"+value.getName());
                     value.set(obj, "");
                 }
             }
@@ -109,7 +107,7 @@ public class DictionaryServiceImpl extends ServiceImpl<DictionaryDao, Dictionary
     }
 
     /**
-     * 判断本实体有没有这个字段
+     * Determine whether the entity has this field
      * @param c
      * @param fieldName
      * @return
