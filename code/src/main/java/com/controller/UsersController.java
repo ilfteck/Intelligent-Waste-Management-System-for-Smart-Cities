@@ -26,7 +26,7 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 登录相关
+ * login
  */
 @RequestMapping("users")
 @RestController
@@ -39,14 +39,14 @@ public class UsersController {
 	private TokenService tokenService;
 
 	/**
-	 * 登录
+	 * log
 	 */
 	@IgnoreAuth
 	@PostMapping(value = "/login")
 	public R login(String username, String password, String captcha, HttpServletRequest request) {
 		UsersEntity user = usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", username));
 		if(user==null || !user.getPassword().equals(password)) {
-			return R.error("账号或密码不正确");
+			return R.error("The account or password is incorrect");
 		}
 		String token = tokenService.generateToken(user.getId(),username, "users", user.getRole());
 		R r = R.ok();
@@ -57,42 +57,42 @@ public class UsersController {
 	}
 	
 	/**
-	 * 注册
+	 * Sign in
 	 */
 	@IgnoreAuth
 	@PostMapping(value = "/register")
 	public R register(@RequestBody UsersEntity user){
 //    	ValidatorUtils.validateEntity(user);
     	if(usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", user.getUsername())) !=null) {
-    		return R.error("用户已存在");
+    		return R.error("User exists");
     	}
         usersService.insert(user);
         return R.ok();
     }
 
 	/**
-	 * 退出
+	 * end
 	 */
 	@GetMapping(value = "logout")
 	public R logout(HttpServletRequest request) {
 		request.getSession().invalidate();
-		return R.ok("退出成功");
+		return R.ok("Exit successfully");
 	}
 
 	/**
-	 * 修改密码
+	 * change password
 	 */
 	@GetMapping(value = "/updatePassword")
 	public R updatePassword(String  oldPassword, String  newPassword, HttpServletRequest request) {
 		UsersEntity users = usersService.selectById((Integer)request.getSession().getAttribute("userId"));
 		if(newPassword == null){
-			return R.error("新密码不能为空") ;
+			return R.error("The new password cannot be empty") ;
 		}
 		if(!oldPassword.equals(users.getPassword())){
-			return R.error("原密码输入错误");
+			return R.error("The old password was entered incorrectly");
 		}
 		if(newPassword.equals(users.getPassword())){
-			return R.error("新密码不能和原密码一致") ;
+			return R.error("The new password cannot be the same as the old password") ;
 		}
 		users.setPassword(newPassword);
 		usersService.updateById(users);
@@ -100,22 +100,22 @@ public class UsersController {
 	}
 	
 	/**
-     * 密码重置
+     * Password reset
      */
     @IgnoreAuth
 	@RequestMapping(value = "/resetPass")
     public R resetPass(String username, HttpServletRequest request){
     	UsersEntity user = usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", username));
     	if(user==null) {
-    		return R.error("账号不存在");
+    		return R.error("Account does not exist");
     	}
     	user.setPassword("123456");
         usersService.update(user,null);
-        return R.ok("密码已重置为：123456");
+        return R.ok("Password has been reset to：123456");
     }
 	
 	/**
-     * 列表
+     * list
      */
     @RequestMapping("/page")
     public R page(@RequestParam Map<String, Object> params,UsersEntity user){
@@ -125,7 +125,7 @@ public class UsersController {
     }
 
 	/**
-     * 列表
+     * list
      */
     @RequestMapping("/list")
     public R list( UsersEntity user){
@@ -135,7 +135,7 @@ public class UsersController {
     }
 
     /**
-     * 信息
+     * info
      */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") String id){
@@ -144,7 +144,7 @@ public class UsersController {
     }
     
     /**
-     * 获取用户的session用户信息
+     * Obtain session user information about the user
      */
     @RequestMapping("/session")
     public R getCurrUser(HttpServletRequest request){
@@ -154,30 +154,30 @@ public class UsersController {
     }
 
     /**
-     * 保存
+     * save
      */
     @PostMapping("/save")
     public R save(@RequestBody UsersEntity user){
 //    	ValidatorUtils.validateEntity(user);
     	if(usersService.selectOne(new EntityWrapper<UsersEntity>().eq("username", user.getUsername())) !=null) {
-    		return R.error("用户已存在");
+    		return R.error("User exists");
     	}
         usersService.insert(user);
         return R.ok();
     }
 
     /**
-     * 修改
+     * change
      */
     @RequestMapping("/update")
     public R update(@RequestBody UsersEntity user){
 //        ValidatorUtils.validateEntity(user);
-        usersService.updateById(user);//全部更新
+        usersService.updateById(user);//updaata
         return R.ok();
     }
 
     /**
-     * 删除
+     * delete
      */
     @RequestMapping("/delete")
     public R delete(@RequestBody Long[] ids){
@@ -185,7 +185,7 @@ public class UsersController {
 		if(user.size() > 1){
 			usersService.deleteBatchIds(Arrays.asList(ids));
 		}else{
-			return R.error("管理员最少保留一个");
+			return R.error("The administrator retains at least one");
 		}
         return R.ok();
     }
