@@ -28,8 +28,8 @@ import com.utils.PageUtils;
 import com.utils.R;
 
 /**
- * 字典
- * 后端接口
+ * dictionary
+ * Back-enad interfaace
  * @author
  * @email
 */
@@ -49,21 +49,21 @@ public class DictionaryController {
     private TokenService tokenService;
 
     @Autowired
-    private TransportService transportService;//运输
+    private TransportService transportService;
     @Autowired
-    private AnnouncementService announcementService;//公告
+    private AnnouncementService announcementService;
     @Autowired
-    private RecycleService recycleService;//垃圾回收
+    private RecycleService recycleService;
     @Autowired
-    private RecycleReserveService recycleReserveService;//垃圾出库申请
+    private RecycleReserveService recycleReserveService;
     @Autowired
-    private MemberService memberService;//用户
+    private MemberService memberService;
     @Autowired
-    private UsersService usersService;//管理员
+    private UsersService usersService;
 
 
     /**
-    * 后端列表
+    * Back-end list
     */
     @RequestMapping("/page")
     @IgnoreAuth
@@ -71,28 +71,25 @@ public class DictionaryController {
         logger.debug("page方法:,,Controller:{},,params:{}",this.getClass().getName(),JSONObject.toJSONString(params));
         CommonUtil.checkMap(params);
         PageUtils page = dictionaryService.queryPage(params);
-
-        //字典表数据转换
         List<DictionaryView> list =(List<DictionaryView>)page.getList();
         for(DictionaryView c:list){
-            //修改对应字典表字段
             dictionaryService.dictionaryConvert(c, request);
         }
         return R.ok().put("data", page);
     }
 
     /**
-    * 后端详情
+    * back-end detail
     */
     @RequestMapping("/info/{id}")
     public R info(@PathVariable("id") Long id, HttpServletRequest request){
         logger.debug("info方法:,,Controller:{},,id:{}",this.getClass().getName(),id);
         DictionaryEntity dictionary = dictionaryService.selectById(id);
         if(dictionary !=null){
-            //entity转view
+            //entity to view
             DictionaryView view = new DictionaryView();
-            BeanUtils.copyProperties( dictionary , view );//把实体数据重构到view中
-            //修改对应字典表字段
+            BeanUtils.copyProperties( dictionary , view );//Refactor the entity data into the view
+            //Example Modify the corresponding dictionary table fields
             dictionaryService.dictionaryConvert(view, request);
             return R.ok().put("data", view);
         }else {
@@ -102,7 +99,7 @@ public class DictionaryController {
     }
 
     /**
-    * 后端保存
+    * back-end save
     */
     @RequestMapping("/save")
     public R save(@RequestBody DictionaryEntity dictionary, HttpServletRequest request){
@@ -110,7 +107,7 @@ public class DictionaryController {
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
         if(false)
-            return R.error(511,"永远不会进入");
+            return R.error(511,"Never enter");
 
         Wrapper<DictionaryEntity> queryWrapper = new EntityWrapper<DictionaryEntity>()
             .eq("dic_code", dictionary.getDicCode())
@@ -120,12 +117,11 @@ public class DictionaryController {
             queryWrapper.eq("super_id",dictionary.getSuperId());
         }
 
-        logger.info("sql语句:"+queryWrapper.getSqlSegment());
+        logger.info("sql language:"+queryWrapper.getSqlSegment());
         DictionaryEntity dictionaryEntity = dictionaryService.selectOne(queryWrapper);
         if(dictionaryEntity==null){
             dictionary.setCreateTime(new Date());
             dictionaryService.insert(dictionary);
-            //字典表新增数据,把数据再重新查出,放入监听器中
             List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new EntityWrapper<DictionaryEntity>());
             ServletContext servletContext = request.getServletContext();
             Map<String, Map<Integer,String>> map = new HashMap<>();
@@ -140,24 +136,24 @@ public class DictionaryController {
             servletContext.setAttribute("dictionaryMap",map);
             return R.ok();
         }else {
-            return R.error(511,"表中有相同数据");
+            return R.error(511,"The table has the same data");
         }
     }
 
     /**
-    * 后端修改
+    * Back-end modification
     */
     @RequestMapping("/update")
     public R update(@RequestBody DictionaryEntity dictionary, HttpServletRequest request) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         logger.debug("update方法:,,Controller:{},,dictionary:{}",this.getClass().getName(),dictionary.toString());
-        DictionaryEntity oldDictionaryEntity = dictionaryService.selectById(dictionary.getId());//查询原先数据
+        DictionaryEntity oldDictionaryEntity = dictionaryService.selectById(dictionary.getId());
 
         String role = String.valueOf(request.getSession().getAttribute("role"));
 //        if(false)
-//            return R.error(511,"永远不会进入");
+//            return R.error(511,"Never enter");
 
-            dictionaryService.updateById(dictionary);//根据id更新
-            //如果字典表修改数据的话,把数据再重新查出,放入监听器中
+            dictionaryService.updateById(dictionary);//Update by id
+            //If the dictionary table modifies the data, look it up again and put it in the listener
             List<DictionaryEntity> dictionaryEntities = dictionaryService.selectList(new EntityWrapper<DictionaryEntity>());
             ServletContext servletContext = request.getServletContext();
             Map<String, Map<Integer,String>> map = new HashMap<>();
@@ -176,19 +172,19 @@ public class DictionaryController {
 
 
     /**
-    * 删除
+    * delete
     */
     @RequestMapping("/delete")
     public R delete(@RequestBody Integer[] ids, HttpServletRequest request){
         logger.debug("delete:,,Controller:{},,ids:{}",this.getClass().getName(),ids.toString());
-        List<DictionaryEntity> oldDictionaryList =dictionaryService.selectBatchIds(Arrays.asList(ids));//要删除的数据
+        List<DictionaryEntity> oldDictionaryList =dictionaryService.selectBatchIds(Arrays.asList(ids));//Data to delete
         dictionaryService.deleteBatchIds(Arrays.asList(ids));
 
         return R.ok();
     }
 
     /**
-     * 最大值
+     * mix
      */
     @RequestMapping("/maxCodeIndex")
     public R maxCodeIndex(@RequestBody DictionaryEntity dictionary){
@@ -208,7 +204,7 @@ public class DictionaryController {
     }
 
     /**
-     * 批量上传
+     * Batch upload
      */
     @RequestMapping("/batchInsert")
     public R save( String fileName, HttpServletRequest request){
@@ -216,8 +212,8 @@ public class DictionaryController {
         Integer memberId = Integer.valueOf(String.valueOf(request.getSession().getAttribute("userId")));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            List<DictionaryEntity> dictionaryList = new ArrayList<>();//上传的东西
-            Map<String, List<String>> seachFields= new HashMap<>();//要查询的字段
+            List<DictionaryEntity> dictionaryList = new ArrayList<>();//Batch upload
+            Map<String, List<String>> seachFields= new HashMap<>();//Batch upload
             Date date = new Date();
             int lastIndexOf = fileName.lastIndexOf(".");
             if(lastIndexOf == -1){
@@ -227,30 +223,30 @@ public class DictionaryController {
                 if(!".xls".equals(suffix)){
                     return R.error(511,"只支持后缀为xls的excel文件");
                 }else{
-                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//获取文件路径
+                    URL resource = this.getClass().getClassLoader().getResource("static/upload/" + fileName);//Get file path
                     File file = new File(resource.getFile());
                     if(!file.exists()){
                         return R.error(511,"找不到上传文件，请联系管理员");
                     }else{
-                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//读取xls文件
-                        dataList.remove(0);//删除第一行，因为第一行是提示
+                        List<List<String>> dataList = PoiUtil.poiImport(file.getPath());//Get file path
+                        dataList.remove(0);//Delete the first line because the first line is the prompt
                         for(List<String> data:dataList){
                             //循环
                             DictionaryEntity dictionaryEntity = new DictionaryEntity();
-//                            dictionaryEntity.setDicCode(data.get(0));                    //字段 要改的
-//                            dictionaryEntity.setDicName(data.get(0));                    //字段名 要改的
-//                            dictionaryEntity.setCodeIndex(Integer.valueOf(data.get(0)));   //编码 要改的
-//                            dictionaryEntity.setIndexName(data.get(0));                    //编码名字 要改的
-//                            dictionaryEntity.setSuperId(Integer.valueOf(data.get(0)));   //父字段id 要改的
-//                            dictionaryEntity.setBeizhu(data.get(0));                    //备注 要改的
-//                            dictionaryEntity.setCreateTime(date);//时间
+//                            dictionaryEntity.setDicCode(data.get(0));                   
+//                            dictionaryEntity.setDicName(data.get(0));                    
+//                            dictionaryEntity.setCodeIndex(Integer.valueOf(data.get(0)));   
+//                            dictionaryEntity.setIndexName(data.get(0));                    
+//                            dictionaryEntity.setSuperId(Integer.valueOf(data.get(0)));   
+//                            dictionaryEntity.setBeizhu(data.get(0));                    
+//                            dictionaryEntity.setCreateTime(date);
                             dictionaryList.add(dictionaryEntity);
 
 
-                            //把要查询是否重复的字段放入map中
+                            //Put the field you want to query for duplicates into the map
                         }
 
-                        //查询是否重复
+                        //Check whether duplicate
                         dictionaryService.insertBatch(dictionaryList);
                         return R.ok();
                     }
@@ -258,7 +254,7 @@ public class DictionaryController {
             }
         }catch (Exception e){
             e.printStackTrace();
-            return R.error(511,"批量插入数据异常，请联系管理员");
+            return R.error(511,"If data cannot be inserted in batches, contact the administrator");
         }
     }
 
