@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dao.MemberReserveDao">
 
-    <!-- 通用查询结果列 -->
+    <!-- Generic query result column -->
     <sql id="Base_Column_List">
         a.id as id
         ,a.recycle_reserve_uuid_number as recyclereserveUuidNumber
@@ -19,7 +19,7 @@
     <select id="selectListView" parameterType="map" resultType="com.entity.view.RecycleReserveView" >
         SELECT
         <include refid="Base_Column_List" />
-        <!-- 级联表的字段 -->
+        <!-- Fields of the cascade table -->
         ,recycle.recycle_name as recycleName
         ,recycle.recycle_uuid_number as recycleUuidNumber
         ,recycle.recycle_photo as recyclePhoto
@@ -87,7 +87,7 @@
                 <![CDATA[  and UNIX_TIMESTAMP(a.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
             </if>
 
-                <!-- 判断垃圾回收的id不为空 -->
+                <!-- Determines that the garbage collection id is not empty -->
             <if test=" params.recycleIdNotNull != '' and params.recycleIdNotNull != null and params.recycleIdNotNull != 'null' ">
                 and a.recycle_id IS NOT NULL
             </if>
@@ -137,7 +137,7 @@
             <if test=" params.insertTimeEnd != '' and params.insertTimeEnd != null ">
                 <![CDATA[  and UNIX_TIMESTAMP(recycle.insert_time) <= UNIX_TIMESTAMP(#{params.insertTimeEnd}) ]]>
             </if>
-                <!-- 判断用户的id不为空 -->
+                <!-- Check that the user id is not empty -->
             <if test=" params.memberIdNotNull != '' and params.memberIdNotNull != null and params.memberIdNotNull != 'null' ">
                 and a.member_id IS NOT NULL
             </if>
