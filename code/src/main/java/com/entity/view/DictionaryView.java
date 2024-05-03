@@ -13,15 +13,15 @@ import java.util.Date;
 import com.utils.DateUtil;
 
 /**
-* 字典
-* 后端返回视图实体辅助类
-* （通常后端关联的表或者自定义的字段需要返回使用）
+* Dictionary
+* The back end returns the view entity helper class
+* (Usually back-end associated tables or custom fields need to be returned for use)
 */
 @TableName("dictionary")
 public class DictionaryView extends DictionaryEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	//当前表
+	//Current table
 
 
 
