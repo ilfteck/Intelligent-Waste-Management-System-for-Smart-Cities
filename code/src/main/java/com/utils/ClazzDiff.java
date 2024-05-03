@@ -18,16 +18,16 @@ public class ClazzDiff {
 
 
     /**
-     * 对象比较,返回出list,obj1的属性值为空的时候自动忽略比对obj2的属性值
-     * @param obj1 对象1
-     * @param obj2 对象2
-     * @param ignoreProperties 忽略的属性
+     * Object comparison, return a list, and automatically ignore the comparison of obj2 if the attribute value of obj1 is empty
+     * @param obj1 
+     * @param obj2 
+     * @param ignoreProperties 
      * @return
      */
     public  List<String> ClazzDiffColumn(Object obj1, Object obj2, @Nullable String... ignoreProperties) throws NoSuchFieldException, IllegalAccessException {
 
-        Assert.notNull(obj1, "obj1不是空的");
-        Assert.notNull(obj2, "obj2不是空的");
+        Assert.notNull(obj1, "obj1 is not empty");
+        Assert.notNull(obj2, "obj2 is not empty");
 
 
         List<String> list = new ArrayList<>();
@@ -35,38 +35,37 @@ public class ClazzDiff {
         Class<?> obj1Class = obj1.getClass();
         Class<?> obj2Class = obj2.getClass();
         if (!obj1Class.isInstance(obj2)) {
-            throw new IllegalArgumentException("传入的两个类不是同一个类");
+            throw new IllegalArgumentException("The two classes passed in are not the same class");
         }
         List<String> ignoreList = (ignoreProperties != null ? Arrays.asList(ignoreProperties) : null);//要忽略的属性
 
         /**
-         * 当前表
+         * Current table
          */
         Field[] obj1DeclaredFields = obj1Class.getDeclaredFields();
-        for (Field f : obj1DeclaredFields) {//ojb1的所有字段循环
+        for (Field f : obj1DeclaredFields) {//Loop all fields of ojb1
             f.setAccessible(true);
             Field obj1Field = obj1Class.getDeclaredField(f.getName());
             Field obj2Field = obj2Class.getDeclaredField(f.getName());
             obj1Field.setAccessible(true);
             obj2Field.setAccessible(true);
 
-//            属性1不为空,属性2不为空 如果传入的有ignoreProperties的话,不为空并且不包含
-            if (obj1Field.get(obj1) != null &&(ignoreList == null || !ignoreList.contains(obj1Field.getName())) ) {
+// Property 1 is not null, property 2 is not null if ignoreProperties are passed in, and is not included            if (obj1Field.get(obj1) != null &&(ignoreList == null || !ignoreList.contains(obj1Field.getName())) ) {
                 ColumnInfo columnInfo = obj1Field.getAnnotation(ColumnInfo.class);
                 Object o1 = obj1Field.get(obj1);
                 Object o2 = obj2Field.get(obj2);
 
                 if(!String.valueOf(o1).equals(String.valueOf(o2))){
                     if(f.getName().contains("File")){
-                        list.add(columnInfo.comment()+"-->现在 : <a type='success' style='text-decoration:none' class='el-button' href='"+o1+"' >文件下载</a>,原先 : <a type='success' style='text-decoration:none' class='el-button' href='"+o2+"' >文件下载</a>");
+                        list.add(columnInfo.comment()+"-->now : <a type='success' style='text-decoration:none' class='el-button' href='"+o1+"' >File download</a>,original : <a type='success' style='text-decoration:none' class='el-button' href='"+o2+"' >文件下载</a>");
                     }else if(f.getName().contains("Video")){
-                        list.add(columnInfo.comment()+"-->现在 : <video src='"+o1+"' width='100px' height='100px' controls='controls'></video>,原先 : <video src='"+o2+"' width='100px' height='100px' controls='controls'></video>");
+                        list.add(columnInfo.comment()+"-->now : <video src='"+o1+"' width='100px' height='100px' controls='controls'></video>,original : <video src='"+o2+"' width='100px' height='100px' controls='controls'></video>");
                     }else if(f.getName().contains("Photo")){
-                        list.add(columnInfo.comment()+"-->现在 : <img src='"+o1+"' width='100px' height='100px'>,原先 : <img src='"+o2+"' width='100px' height='100px'>");
+                        list.add(columnInfo.comment()+"-->now : <img src='"+o1+"' width='100px' height='100px'>,original : <img src='"+o2+"' width='100px' height='100px'>");
                     }else if(f.getName().contains("Time")){
-                        list.add(columnInfo.comment()+"-->现在 : ["+ DateUtils.format((Date) o1,"yyyy-MM-dd")+"],原先 : ["+DateUtils.format((Date) o2,"yyyy-MM-dd")+"]");
+                        list.add(columnInfo.comment()+"-->now : ["+ DateUtils.format((Date) o1,"yyyy-MM-dd")+"],original : ["+DateUtils.format((Date) o2,"yyyy-MM-dd")+"]");
                     }else{
-                        list.add(columnInfo.comment()+"-->现在 : ["+o1+"],原先 : ["+o2+"]");
+                        list.add(columnInfo.comment()+"-->now : ["+o1+"],original : ["+o2+"]");
                     }
                 }
             }
@@ -78,30 +77,29 @@ public class ClazzDiff {
          * 父表
          */
         Field[] obj1DeclaredFields2 = obj1Class.getSuperclass().getDeclaredFields();
-        for (Field f : obj1DeclaredFields2) {//ojb1的所有字段循环
+        for (Field f : obj1DeclaredFields2) {//Loop all fields of ojb1
             f.setAccessible(true);
             Field obj1Field = obj1Class.getSuperclass().getDeclaredField(f.getName());
             Field obj2Field = obj2Class.getSuperclass().getDeclaredField(f.getName());
             obj1Field.setAccessible(true);
             obj2Field.setAccessible(true);
 
-//            属性1不为空,属性2不为空 如果传入的有ignoreProperties的话,不为空并且不包含
-            if (obj1Field.get(obj1) != null &&(ignoreList == null || !ignoreList.contains(obj1Field.getName())) ) {
+// Property 1 is not null, property 2 is not null if ignoreProperties are passed in, and is not included            if (obj1Field.get(obj1) != null &&(ignoreList == null || !ignoreList.contains(obj1Field.getName())) ) {
                 ColumnInfo columnInfo = obj1Field.getAnnotation(ColumnInfo.class);
                 Object o1 = obj1Field.get(obj1);
                 Object o2 = obj2Field.get(obj2);
 
                 if(!String.valueOf(o1).equals(String.valueOf(o2))){
                     if(f.getName().contains("File")){
-                        list.add(columnInfo.comment()+"-->现在 : <a type='success' style='text-decoration:none' class='el-button' href='"+o1+"' >文件下载</a>,原先 : <a type='success' style='text-decoration:none' class='el-button' href='"+o2+"' >文件下载</a>");
+                        list.add(columnInfo.comment()+"-->now : <a type='success' style='text-decoration:none' class='el-button' href='"+o1+"' >File download</a>,original : <a type='success' style='text-decoration:none' class='el-button' href='"+o2+"' >文件下载</a>");
                     }else if(f.getName().contains("Video")){
-                        list.add(columnInfo.comment()+"-->现在 : <video src='"+o1+"' width='100px' height='100px' controls='controls'></video>,原先 : <video src='"+o2+"' width='100px' height='100px' controls='controls'></video>");
+                        list.add(columnInfo.comment()+"-->now : <video src='"+o1+"' width='100px' height='100px' controls='controls'></video>,original : <video src='"+o2+"' width='100px' height='100px' controls='controls'></video>");
                     }else if(f.getName().contains("Photo")){
-                        list.add(columnInfo.comment()+"-->现在 : <img src='"+o1+"' width='100px' height='100px'>,原先 : <img src='"+o2+"' width='100px' height='100px'>");
+                        list.add(columnInfo.comment()+"-->now : <img src='"+o1+"' width='100px' height='100px'>,original : <img src='"+o2+"' width='100px' height='100px'>");
                     }else if(f.getName().contains("Time")){
-                        list.add(columnInfo.comment()+"-->现在 : ["+ DateUtils.format((Date) o1,"yyyy-MM-dd")+"],原先 : ["+DateUtils.format((Date) o2,"yyyy-MM-dd")+"]");
+                        list.add(columnInfo.comment()+"-->now : ["+ DateUtils.format((Date) o1,"yyyy-MM-dd")+"],original : ["+DateUtils.format((Date) o2,"yyyy-MM-dd")+"]");
                     }else{
-                        list.add(columnInfo.comment()+"-->现在 : ["+o1+"],原先 : ["+o2+"]");
+                        list.add(columnInfo.comment()+"-->now : ["+o1+"],original : ["+o2+"]");
                     }
                 }
             }
@@ -112,7 +110,7 @@ public class ClazzDiff {
 
 
     /**
-     * 判断本实体有没有这个字段
+     * Determine whether the entity has this field
      * @param c
      * @param fieldName
      * @return
