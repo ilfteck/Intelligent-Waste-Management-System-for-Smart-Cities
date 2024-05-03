@@ -7,10 +7,10 @@ import java.io.Serializable;
 
 
 /**
- * 公告
- * 接收传参的实体类
- *（实际开发中配合移动端接口开发手动去掉些没用的字段， 后端一般用entity就够用了）
- * 取自ModelAndView 的model名称
+ * announcement
+ * The entity class that receives the argument
+ *(In the actual development, with the mobile interface development, manually remove some useless fields, and the backend is generally enough to use entity)
+ * model name from ModelAndView
  */
 public class AnnouncementModel implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,31 +19,31 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-     * 主键
+     * Major key
      */
     private Integer id;
 
 
     /**
-     * 公告名称
+     * Announcement name
      */
     private String announcementName;
 
 
     /**
-     * 公告图片
+     * Announcement picture
      */
     private String announcementPhoto;
 
 
     /**
-     * 公告类型
+     * Announcement type
      */
     private Integer announcementTypes;
 
 
     /**
-     * 公告发布时间
+     * Announcement time
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat
@@ -51,13 +51,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-     * 公告详情
+     * Announcement details
      */
     private String announcementContent;
 
 
     /**
-     * 创建时间 show1 show2 nameShow
+     *Creation time show1 show2 nameShow
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
 	@DateTimeFormat
@@ -65,7 +65,7 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 获取：主键
+	 * Get: Primary key
 	 */
     public Integer getId() {
         return id;
@@ -73,13 +73,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：主键
+	 *set: Primary key
 	 */
     public void setId(Integer id) {
         this.id = id;
     }
     /**
-	 * 获取：公告名称
+	 * Get: Bulletin name
 	 */
     public String getannouncementName() {
         return announcementName;
@@ -87,13 +87,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：公告名称
+	 * Setting: Bulletin name
 	 */
     public void setannouncementName(String announcementName) {
         this.announcementName = announcementName;
     }
     /**
-	 * 获取：公告图片
+	 * Get: Announcement picture
 	 */
     public String getannouncementPhoto() {
         return announcementPhoto;
@@ -101,13 +101,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：公告图片
+	 * Settings: Announcement picture
 	 */
     public void setannouncementPhoto(String announcementPhoto) {
         this.announcementPhoto = announcementPhoto;
     }
     /**
-	 * 获取：公告类型
+	 *Settings: Announcement picture
 	 */
     public Integer getannouncementTypes() {
         return announcementTypes;
@@ -115,13 +115,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：公告类型
+	 * Setting: Bulletin type
 	 */
     public void setannouncementTypes(Integer announcementTypes) {
         this.announcementTypes = announcementTypes;
     }
     /**
-	 * 获取：公告发布时间
+	 * Obtain: Bulletin release time
 	 */
     public Date getInsertTime() {
         return insertTime;
@@ -129,13 +129,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：公告发布时间
+	 * Setting: Bulletin release time
 	 */
     public void setInsertTime(Date insertTime) {
         this.insertTime = insertTime;
     }
     /**
-	 * 获取：公告详情
+	 *Setting: Bulletin release time
 	 */
     public String getannouncementContent() {
         return announcementContent;
@@ -143,13 +143,13 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：公告详情
+	 * Setting: Bulletin release time
 	 */
     public void setannouncementContent(String announcementContent) {
         this.announcementContent = announcementContent;
     }
     /**
-	 * 获取：创建时间 show1 show2 nameShow
+	 * Setting: Bulletin release time
 	 */
     public Date getCreateTime() {
         return createTime;
@@ -157,7 +157,7 @@ public class AnnouncementModel implements Serializable {
 
 
     /**
-	 * 设置：创建时间 show1 show2 nameShow
+	 * Setting: Creation time show1 show2 nameShow
 	 */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
