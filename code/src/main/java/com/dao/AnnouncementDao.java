@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.entity.view.AnnouncementView;
 
 /**
- * 公告 Dao 接口
+ * Bulletin Dao interface
  *
  * @author 
  */
