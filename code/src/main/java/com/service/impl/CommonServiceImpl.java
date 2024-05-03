@@ -13,7 +13,7 @@ import com.service.CommonService;
 
 
 /**
- * 系统用户
+ * commonService
  * @author
  * @date
  */
@@ -42,16 +42,16 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.barCountTwo(params);
 	}
 	/**
-	 tableName 查询表
-	 condition1 条件1
-	 condition1Value 条件1值
-	 average 计算平均评分
+	 tableName 
+	 condition1 
+	 condition1Value
+	 average
 	 * */
 	public Map<String, Object> queryScore(Map<String, Object> params){
 		return commonDao.queryScore(params);
 	}
 	/**
-	 * 新的级联字典表的  分组求和统计
+	 * newSelectGroupSum
 	 * @param params
 	 * @return
 	 */
@@ -60,7 +60,7 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.newSelectGroupSum(params);
 	}
 	/**
-	 * 新的级联字典表的  分组条数统计
+	 * newSelectGroupCount
 	 * @param params
 	 * @return
 	 */
@@ -69,7 +69,7 @@ public class CommonServiceImpl implements CommonService {
 		return commonDao.newSelectGroupCount(params);
 	}
 	/**
-	 * 柱状图求和
+	 * barSum
 	 * @param params
 	 * @return
 	 */
@@ -78,7 +78,7 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	/**
-	 * 柱状图统计
+	 * barCount
 	 * @param params
 	 * @return
 	 */
