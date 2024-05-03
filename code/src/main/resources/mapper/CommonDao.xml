@@ -3,13 +3,13 @@
 
 <mapper namespace="com.dao.CommonDao">
 	<select id="pieSum" 		resultType="map">
-		<!--		<if test="条件自己写"></if><where></where>-->
+		<!--		<if test="Condition write"></if><where></where>-->
 		select
-		d.index_name 						as name, 		<!-- 字典表						-->
-		a.shangpin_order_types 				as groupColumn, <!-- 这一列页面无用,用于排查问题	-->
+		d.index_name 						as name, 		<!-- Dictionary table						-->
+		a.shangpin_order_types 				as groupColumn, <!-- This column page is useless and used for troubleshooting	-->
 		sum(a.shangpin_order_true_price) 	as value
 		from shangpin_order a
-		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index d.dic_code= 'shangpin_order_types' <!-- 字典表-->
+		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index d.dic_code= 'shangpin_order_types' <!-- Dictionary table-->
 		<if test="riqi != null and riqi != ''">
 			AND date_format(a.insert_time, "%Y-%m") = #{riqi}  <!-- "%Y-%m-%d"	-->
 		</if>
@@ -19,11 +19,11 @@
 	</select>
 	<select id="pieCount" 		resultType="map">
 		select
-		d.index_name 						as name, <!-- 字典表 -->
-		a.shangpin_order_types 				as groupColumn, <!-- 这一列页面无用,用于排查问题 -->
+		d.index_name 						as name, <!-- Dictionary table -->
+		a.shangpin_order_types 				as groupColumn, <!-- This column page is useless and used for troubleshooting -->
 		count(a.buy_number) 	as value
 		from shangpin_order a
-		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' <!-- 字典表 -->
+		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' <!-- Dictionary table -->
 		<if test="riqi != null and riqi != ''">
 			AND date_format(a.insert_time, "%Y-%m") = #{riqi} <!-- "%Y-%m-%d" -->
 		</if>
@@ -31,17 +31,17 @@
 	</select>
 	<select id="barSumOne" 		resultType="map">
 		select
-		d.index_name 						as name, <!-- 字典表 -->
-		a.shangpin_order_types 				as groupColumn, <!-- 这一列页面无用,用于排查问题 -->
+		d.index_name 						as name, <!-- Dictionary table -->
+		a.shangpin_order_types 				as groupColumn, <!-- This column page is useless and used for troubleshooting -->
 		sum(a.shangpin_order_true_price) 	as value
 		from shangpin_order a
-		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' -- 字典表 -->
+		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' -- Dictionary table -->
 		<if test="riqi != null and riqi != ''">
 			AND date_format(a.insert_time, "%Y-%m") = #{riqi} <!-- "%Y-%m-%d" -->
 		</if>
 		GROUP BY a.shangpin_order_types
 
-		<!-- 考试排名统计 -->
+		<!-- Test ranking statistics -->
 		<!-- select
 		member.member_name 	as name,
 		d.total_score 		as value
@@ -52,11 +52,11 @@
 	</select>
 	<select id="barCountOne" 	resultType="map">
 		select
-		d.index_name 						as name, <!-- 字典表 -->
-		a.shangpin_order_types 				as groupColumn, <!-- 这一列页面无用,用于排查问题 -->
+		d.index_name 						as name, <!-- Dictionary table -->
+		a.shangpin_order_types 				as groupColumn, <!-- This column page is useless and used for troubleshooting -->
 		count(a.buy_number) 	as value
 		from shangpin_order a
-		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' <!-- 字典表 -->
+		LEFT JOIN dictionary d ON a.shangpin_order_types=d.code_index where d.dic_code= 'shangpin_order_types' <!-- Dictionary table -->
 		<if test="riqi != null and riqi != ''">
 			AND date_format(a.insert_time, "%Y-%m") = #{riqi} <!-- "%Y-%m-%d" -->
 		</if>
@@ -101,7 +101,7 @@
 	<select id="newSelectGroupSum" resultType="map">
 		select
 			d.index_name as name,
-			a.${groupColumn} as groupColumn, <!-- 这一列页面无用,用于排查问题 -->
+			a.${groupColumn} as groupColumn, <!-- This column page is useless and used for troubleshooting  -->
 			sum(a.${sumColumn}) as value
 		from ${tableName} a
 			LEFT JOIN dictionary d ON a.${groupColumn}=d.code_index where d.dic_code= #{groupColumn}
@@ -110,7 +110,7 @@
 	<select id="newSelectGroupCount" resultType="map">
 		select
 			d.index_name as name,
-			a.${groupColumn} as groupColumn, <!-- 这一列页面无用,用于排查问题 -->
+			a.${groupColumn} as groupColumn, <!-- This column page is useless and used for troubleshooting -->
 			count(*) as value
 		from ${tableName} a
 		LEFT JOIN dictionary d ON a.${groupColumn}=d.code_index where d.dic_code= #{groupColumn}
